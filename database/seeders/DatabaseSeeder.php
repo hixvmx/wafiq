@@ -9,13 +9,14 @@ use App\Models\Item;
 use App\Models\TaxRate;
 use App\Models\User;
 use App\Services\CurrentCompany;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/**
+ * Model events must stay on here (no WithoutModelEvents): BelongsToCompany
+ * fills company_id in a "creating" event.
+ */
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Local development data: one company and its owner.
      * (Realistic Arabic demo data comes with the demo seeder in Phase 10.)
