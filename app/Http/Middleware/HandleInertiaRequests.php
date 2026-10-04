@@ -33,7 +33,11 @@ class HandleInertiaRequests extends Middleware
                 'locale' => app()->getLocale(),
                 'edition' => Edition::name(),
             ],
-            'company' => fn () => app(CurrentCompany::class)->get()?->only('id', 'name', 'logo', 'currency'),
+            'company' => function () {
+                $company = app(CurrentCompany::class)->get();
+
+                return $company ? [...$company->only('id', 'name', 'currency'), 'logo_url' => $company->imageUrl('logo')] : null;
+            },
             'auth' => [
                 'user' => $user?->only('id', 'name', 'email', 'avatar'),
                 'role' => fn () => $user?->currentRole()?->value,

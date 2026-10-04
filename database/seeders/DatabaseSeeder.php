@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Enums\Role;
 use App\Models\Company;
+use App\Models\TaxRate;
 use App\Models\User;
+use App\Services\CurrentCompany;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -29,5 +31,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $company->addMember($owner, Role::Owner);
+
+        app(CurrentCompany::class)->set($company);
+        TaxRate::create(['name' => 'ضريبة القيمة المضافة', 'rate' => 15, 'is_default' => true]);
     }
 }

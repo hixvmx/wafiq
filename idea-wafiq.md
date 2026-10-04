@@ -356,10 +356,10 @@ wafiq/
 - [x] Tests: login link lifecycle, throttling, no account discovery, invitations, permissions matrix
 
 ### Phase 2 — Company settings
-- [ ] Company profile, branding (logo, colour, stamp, signature), bank details
-- [ ] Tax rates (country presets + custom), currencies, number formats & sequences
-- [ ] Default validity days, default terms & notes, **WhatsApp and email message templates** (with variables: client name, number, amount, link, valid-until)
-- [ ] Email settings + **send test email**; reminder and expiry rules; internal review amount limit
+- [x] Company profile, branding (logo, colour, stamp, signature), bank details
+- [x] Tax rates (country presets + custom), currencies, number formats & sequences
+- [x] Default validity days, default terms & notes, **WhatsApp and email message templates** (with variables: client name, number, amount, link, valid-until)
+- [ ] Email settings + **send test email**; reminder and expiry rules; internal review amount limit *(hidden in the section 16 checklist, not in the MVP; mail is configured in `.env` for now)*
 
 ### Phase 3 — Clients & items
 - [ ] Clients CRUD (company / person, **WhatsApp phone with country code**), search, tags, notes, client page (documents, approval history, balance)

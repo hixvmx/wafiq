@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, LogOut, Menu, Users, X } from 'lucide-react';
+import { LayoutDashboard, LogOut, Menu, Settings, Users, X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Avatar } from '@/Components/ui/Card';
@@ -14,6 +14,7 @@ import { useT } from '@/lib/i18n';
 const NAV = [
     { key: 'dashboard', href: '/', match: '/', icon: LayoutDashboard },
     { key: 'team', href: '/team', match: '/team', icon: Users, can: 'manage_team' },
+    { key: 'settings', href: '/settings/company', match: '/settings', icon: Settings, can: 'manage_settings' },
 ];
 
 /** The team's workspace: sidebar on desktop, slide-in menu on phones. */
