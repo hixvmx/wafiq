@@ -338,13 +338,13 @@ wafiq/
 > Each phase ends with **tests passing** and the app **working end to end**. The final scope depends on the checklist in section 16.
 
 ### Phase 0 — Project setup
-- [ ] New Laravel 12 project `wafiq` (separate repo, **not** inside `redstore`)
-- [ ] Install Inertia 2 + React 19 (JSX) + Tailwind 4 + Vite, ESLint + Prettier
-- [ ] Port the Arabic RTL theme, fonts and UI components from Bazarly (TSX → JSX, add PropTypes)
-- [ ] `lang/ar` files, `useT()` helper, Arabic validation messages
-- [ ] Inertia error pages, Toaster, layouts (App, Auth, Public client page, Print)
-- [ ] GitHub Actions (PHP tests + JS lint/build, **both editions**), SQLite test config, `TestCase` without Vite
-- [ ] **SaaS-ready foundation:** `companies` + `company_user` tables, `BelongsToCompany` trait (global scope + auto `company_id`), `CurrentCompany` service, `APP_EDITION` config, test that companies are isolated
+- [x] New Laravel 12 project `wafiq` (separate repo, **not** inside `redstore`)
+- [x] Install Inertia 2 + React 19 (JSX) + Tailwind 4 + Vite, ESLint + Prettier
+- [x] Port the Arabic RTL theme, fonts and UI components from Bazarly (TSX → JSX, add PropTypes)
+- [x] `lang/ar` files, `useT()` helper, Arabic validation messages
+- [x] Inertia error pages, Toaster, layouts (App, Auth, Public client page, Print)
+- [x] GitHub Actions (PHP tests + JS lint/build, **both editions**), SQLite test config, `TestCase` without Vite
+- [x] **SaaS-ready foundation:** `companies` + `company_user` tables, `BelongsToCompany` trait (global scope + auto `company_id`), `CurrentCompany` service, `APP_EDITION` config, test that companies are isolated
 
 ### Phase 1 — Auth & team
 - [ ] Owner created by an installer stub (full installer in Phase 10)

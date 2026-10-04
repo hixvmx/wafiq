@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -22,6 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'notification_prefs',
+        'last_login_at',
     ];
 
     /**
@@ -43,7 +47,31 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
+            'notification_prefs' => 'array',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Companies this user is a member of (exactly one in the self-hosted edition).
+     *
+     * @return BelongsToMany<Company, $this>
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class)->withPivot('role')->withTimestamps();
+    }
+
+    /** The user's role in a company, or null when not a member. */
+    public function roleIn(?Company $company): ?Role
+    {
+        if (! $company) {
+            return null;
+        }
+
+        $role = $this->companies()->whereKey($company->id)->first()?->pivot->role;
+
+        return $role ? Role::tryFrom($role) : null;
     }
 }

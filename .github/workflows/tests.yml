@@ -1,0 +1,70 @@
+name: Tests
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+
+    # Both editions run the same suite: the Picalica build must never depend on SaaS code,
+    # and the SaaS build must keep companies isolated.
+    strategy:
+      fail-fast: false
+      matrix:
+        edition: [self_hosted, saas]
+
+    name: backend (${{ matrix.edition }})
+
+    env:
+      APP_EDITION: ${{ matrix.edition }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl, pdo_sqlite, gd, fileinfo
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run tests
+        run: php artisan test
+
+  frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build

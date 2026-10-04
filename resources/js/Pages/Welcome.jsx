@@ -1,18 +1,19 @@
-import { Head } from '@inertiajs/react';
 import { CheckCircle2 } from 'lucide-react';
+import { Card } from '@/Components/ui/Card';
+import AppLayout from '@/Layouts/AppLayout';
+import { useT } from '@/lib/i18n';
 
-/** Temporary page proving the stack works (Laravel + Inertia + React + Tailwind, RTL Arabic). */
+/** Temporary home page until the dashboard (Phase 9) and login (Phase 1) exist. */
 export default function Welcome() {
+    const t = useT();
+
     return (
-        <>
-            <Head title="مرحباً" />
-            <main className="flex min-h-screen items-center justify-center p-6">
-                <div className="max-w-md rounded-2xl border border-line bg-white p-8 text-center shadow-sm">
-                    <CheckCircle2 className="mx-auto size-12 text-brand-600" />
-                    <h1 className="mt-4 text-2xl font-bold">وافِق</h1>
-                    <p className="mt-2 text-ink-muted">أرسل عرض السعر أو الفاتورة، تابع فتحها، واحصل على موافقة عميلك بضغطة.</p>
-                </div>
-            </main>
-        </>
+        <AppLayout title={t('nav.dashboard')}>
+            <Card className="mx-auto mt-10 max-w-md p-8 text-center">
+                <CheckCircle2 className="mx-auto size-12 text-brand-600" />
+                <h2 className="mt-4 text-2xl font-bold">وافِق</h2>
+                <p className="mt-2 text-ink-muted">{t('app.tagline')}</p>
+            </Card>
+        </AppLayout>
     );
 }
