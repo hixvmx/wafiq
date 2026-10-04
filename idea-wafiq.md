@@ -391,13 +391,13 @@ wafiq/
 - [x] Tracking timeline on the document page *(live status polling: hidden in the section 16 checklist)*
 
 ### Phase 6 — Payments (invoices)
-- [ ] Record payments (partial / full, method, reference), payment status, overdue detection + reminders
-- [ ] Void invoice with reason
+- [ ] Record payments (partial / full, method, reference), payment status, overdue detection + reminders *(hidden in the section 16 checklist: skipped for v1)*
+- [ ] Void invoice with reason *(hidden in the section 16 checklist: skipped for v1)*
 
 ### Phase 7 — PDF & print
-- [ ] TCPDF renderer with Arabic font + 3 templates, logo / stamp / signature, amount in words, bank details
-- [ ] Approval stamp on approved PDFs; optional Hijri date; optional ZATCA Phase 1 QR
-- [ ] Browser print view
+- [x] TCPDF renderer with IBM Plex Sans Arabic (OFL, converted once into `resources/fonts/pdf`), logo / stamp / signature, amount in words, bank details, page numbers; left-to-right runs (IBAN, phone, email, document number) kept in order; team download, client download, optional email attachment *(3 templates: hidden in the section 16 checklist, one layout for now)*
+- [x] Approval stamp on approved PDFs *(Hijri date, ZATCA Phase 1 QR: hidden in the section 16 checklist)*
+- [ ] Browser print view *(hidden in the section 16 checklist)*
 
 ### Phase 8 — Collaboration & notifications
 - [ ] Comments with @mentions, assignment, watchers

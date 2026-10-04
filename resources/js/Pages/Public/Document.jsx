@@ -1,10 +1,10 @@
 import { router, useForm } from '@inertiajs/react';
 import axios from 'axios';
-import { CheckCircle2, Clock, Eye, RefreshCw, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, Download, Eye, RefreshCw, XCircle } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { DocumentPaper } from '@/Components/Document/DocumentPaper';
-import { Button } from '@/Components/ui/Button';
+import { Button, buttonClass } from '@/Components/ui/Button';
 import { Dialog } from '@/Components/ui/Dialog';
 import { Checkbox, Field, Select, TextArea, TextInput } from '@/Components/ui/Field';
 import { Toaster } from '@/Components/ui/Toaster';
@@ -27,6 +27,12 @@ export default function PublicDocument({ token, document: doc, state, answer, ca
         <PublicLayout title={`${typeName} ${doc.number}`} brand={{ name: doc.company.name, logo_url: doc.company.logo_url, color: doc.company.brand_color }}>
             <div className="mx-auto max-w-4xl space-y-4 pb-28">
                 {isTeam && <Banner tone="info" icon={Eye} text={t('public.team_banner')} />}
+                <div className="flex justify-end">
+                    <a href={`/d/${token}/pdf`} className={buttonClass({ variant: 'secondary', size: 'sm' })}>
+                        <Download className="size-4" />
+                        {t('pdf.download')}
+                    </a>
+                </div>
                 <StateBanner state={state} answer={answer} validUntil={doc.valid_until} token={token} />
                 <DocumentPaper document={doc} />
             </div>

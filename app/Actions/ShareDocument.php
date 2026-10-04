@@ -47,7 +47,7 @@ class ShareDocument
     }
 
     /**
-     * @param  array{recipient?: ?string, message?: ?string, subject?: ?string}  $data  message/subject may contain {link}
+     * @param  array{recipient?: ?string, message?: ?string, subject?: ?string, attach_pdf?: bool}  $data  message/subject may contain {link}
      * @return array{send: DocumentSend, url: string, message: ?string, whatsapp_url: ?string, email_failed: bool}
      */
     public function share(Document $document, string $channel, array $data, User $user): array
@@ -72,7 +72,7 @@ class ShareDocument
 
         $emailFailed = false;
         if ($channel === 'email') {
-            $emailFailed = ! $this->email($document, $send, MessageTemplate::render($data['subject'] ?? '', ['link' => $url]), (string) $message, $url);
+            $emailFailed = ! $this->email($document, $send, MessageTemplate::render($data['subject'] ?? '', ['link' => $url]), (string) $message, $url, (bool) ($data['attach_pdf'] ?? false));
         }
 
         return [
@@ -86,10 +86,10 @@ class ShareDocument
     }
 
     /** Sends now (the member waits for the answer). A mail failure is recorded, never thrown. */
-    private function email(Document $document, DocumentSend $send, string $subject, string $body, string $url): bool
+    private function email(Document $document, DocumentSend $send, string $subject, string $body, string $url, bool $attachPdf): bool
     {
         try {
-            Mail::to($send->recipient)->send(new DocumentMail($document, $subject, $body, $url));
+            Mail::to($send->recipient)->send(new DocumentMail($document, $subject, $body, $url, $attachPdf));
             $send->update(['email_status' => 'sent']);
 
             return true;

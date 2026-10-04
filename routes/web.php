@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AcceptInvitationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentPdfController;
 use App\Http\Controllers\DocumentShareController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PublicDocumentController;
@@ -39,6 +40,7 @@ Route::controller(AcceptInvitationController::class)->group(function () {
 */
 Route::prefix('d/{token}')->name('public.')->controller(PublicDocumentController::class)->group(function () {
     Route::get('/', 'show')->name('document');
+    Route::get('pdf', 'pdf')->middleware('throttle:30,1')->name('pdf');
     Route::post('view', 'view')->middleware('throttle:60,1')->name('view');
     Route::post('approve', 'approve')->middleware('throttle:10,1')->name('approve');
     Route::post('reject', 'reject')->middleware('throttle:10,1')->name('reject');
@@ -73,6 +75,7 @@ Route::middleware(['auth', 'member'])->group(function () {
             Route::post('{document}/send', 'store')->name('send')->defaults('type', $type);
             Route::post('{document}/extend', 'extend')->name('extend')->defaults('type', $type);
         });
+        Route::get("{$prefix}/{document}/pdf", DocumentPdfController::class)->name("{$prefix}.pdf")->defaults('type', $type);
     }
 
     // Every member can browse clients and the catalog; editing needs the matching permission.

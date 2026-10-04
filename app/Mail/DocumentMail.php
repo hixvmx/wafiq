@@ -3,9 +3,11 @@
 namespace App\Mail;
 
 use App\Models\Document;
+use App\Services\PdfRenderer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
@@ -19,7 +21,20 @@ class DocumentMail extends Mailable
         public string $mailSubject,
         public string $body,
         public string $url,
+        public bool $attachPdf = false,
     ) {}
+
+    /** @return list<Attachment> */
+    public function attachments(): array
+    {
+        if (! $this->attachPdf) {
+            return [];
+        }
+
+        $pdf = app(PdfRenderer::class);
+
+        return [Attachment::fromData(fn () => $pdf->render($this->document), $pdf->filename($this->document))->withMime('application/pdf')];
+    }
 
     public function envelope(): Envelope
     {

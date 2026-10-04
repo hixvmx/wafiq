@@ -52,11 +52,17 @@ final class Money
     /** 1250050 SAR → "12,500.50 SAR" (for messages and emails). */
     public static function format(int $minor, string $currency): string
     {
-        [$whole, $fraction] = array_pad(explode('.', self::fromMinor($minor, $currency)), 2, null);
+        return self::group(self::fromMinor($minor, $currency))." {$currency}";
+    }
+
+    /** "12500.50" → "12,500.50" (thousands separators on a decimal string). */
+    public static function group(string $decimal): string
+    {
+        [$whole, $fraction] = array_pad(explode('.', $decimal), 2, null);
         $sign = str_starts_with($whole, '-') ? '-' : '';
         $whole = ltrim($whole, '-');
 
-        return $sign.strrev(implode(',', str_split(strrev($whole), 3))).($fraction !== null ? ".{$fraction}" : '')." {$currency}";
+        return $sign.strrev(implode(',', str_split(strrev($whole), 3))).($fraction !== null ? ".{$fraction}" : '');
     }
 
     /** Validation regex for an amount typed in a form, for a given currency. */

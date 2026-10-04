@@ -8,6 +8,7 @@ use App\Models\Document;
 use App\Models\DocumentSend;
 use App\Services\CurrentCompany;
 use App\Services\DocumentWorkflow;
+use App\Services\PdfRenderer;
 use App\Support\DocumentPresenter;
 use App\Support\Money;
 use App\Support\Token;
@@ -56,6 +57,20 @@ class PublicDocumentController extends Controller
                 'description' => Money::format($document->total_minor, $document->currency),
                 'image' => $document->company->imageUrl('logo'),
             ],
+        ]);
+    }
+
+    /** The client downloads the PDF (doesn't count as a view: only the page's signal does). */
+    public function pdf(string $token, PdfRenderer $pdf): HttpResponse
+    {
+        [, $document] = $this->resolve($token);
+        $this->workflow->expireIfDue($document);
+
+        return response($pdf->render($document), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="'.$pdf->filename($document).'"',
+            'Cache-Control' => 'private, no-store',
+            'X-Robots-Tag' => 'noindex',
         ]);
     }
 

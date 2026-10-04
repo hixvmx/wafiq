@@ -193,6 +193,8 @@ return [
             'from' => 'من',
             'vat' => 'الرقم الضريبي: :number',
             'cr' => 'السجل التجاري: :number',
+            'phone' => 'الهاتف:',
+            'email' => 'البريد:',
             'col_number' => '#',
             'col_item' => 'البند',
             'col_qty' => 'الكمية',
@@ -227,6 +229,14 @@ return [
         'revised' => 'تم إنشاء الإصدار :revision. عدّله ثم أرسله.',
         'converted' => 'تم إنشاء الفاتورة من عرض السعر.',
         'deleted' => 'تم الحذف.',
+    ],
+
+    'pdf' => [
+        'page' => 'صفحة',
+        'download' => 'تحميل PDF',
+        'attach' => 'إرفاق ملف PDF',
+        'approved_by' => 'تمت الموافقة بواسطة :name في :date',
+        'approved_ip' => 'عنوان IP:',
     ],
 
     'share' => [

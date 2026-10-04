@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Button } from '@/Components/ui/Button';
 import { Dialog } from '@/Components/ui/Dialog';
-import { Field, TextArea, TextInput } from '@/Components/ui/Field';
+import { Checkbox, Field, TextArea, TextInput } from '@/Components/ui/Field';
 import { cn } from '@/lib/format';
 import { useT } from '@/lib/i18n';
 
@@ -24,7 +24,7 @@ export function SendDialog({ open, onClose, url, number, defaults }) {
     const [channel, setChannel] = useState('whatsapp');
     const [values, setValues] = useState(() => ({
         whatsapp: { recipient: defaults.whatsapp.phone ?? '', message: defaults.whatsapp.message },
-        email: { recipient: defaults.email.to ?? '', subject: defaults.email.subject, message: defaults.email.body },
+        email: { recipient: defaults.email.to ?? '', subject: defaults.email.subject, message: defaults.email.body, attach_pdf: true },
         link: {},
     }));
     const [errors, setErrors] = useState({});
@@ -160,6 +160,7 @@ export function SendDialog({ open, onClose, url, number, defaults }) {
                                     />
                                 )}
                             </Field>
+                            <Checkbox label={t('pdf.attach')} checked={values.email.attach_pdf} onChange={(e) => set('attach_pdf', e.target.checked)} />
                         </>
                     )}
 

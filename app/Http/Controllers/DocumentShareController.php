@@ -29,6 +29,7 @@ class DocumentShareController extends Controller
             'recipient' => [Rule::requiredIf(in_array($channel, ['email', 'whatsapp'], true)), 'nullable', 'string', 'max:255', ...($channel === 'email' ? ['email'] : [])],
             'subject' => [Rule::requiredIf($channel === 'email'), 'nullable', 'string', 'max:255'],
             'message' => [Rule::requiredIf(in_array($channel, ['email', 'whatsapp'], true)), 'nullable', 'string', 'max:5000'],
+            'attach_pdf' => ['boolean'],
         ]);
 
         if ($channel === 'whatsapp') {

@@ -1,12 +1,12 @@
 import { Link, router, useForm } from '@inertiajs/react';
-import { CalendarClock, Copy, FilePen, FileText, Pencil, RefreshCw, Send, Trash2 } from 'lucide-react';
+import { CalendarClock, Copy, Download, FilePen, FileText, Pencil, RefreshCw, Send, Trash2 } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { DocumentPaper } from '@/Components/Document/DocumentPaper';
 import { SendDialog } from '@/Components/Document/SendDialog';
 import { StatusBadge } from '@/Components/Document/StatusBadge';
 import { TrackingTimeline } from '@/Components/Document/TrackingTimeline';
-import { Button, ButtonLink } from '@/Components/ui/Button';
+import { Button, ButtonLink, buttonClass } from '@/Components/ui/Button';
 import { ConfirmDialog } from '@/Components/ui/ConfirmDialog';
 import { Dialog } from '@/Components/ui/Dialog';
 import { Field, TextInput } from '@/Components/ui/Field';
@@ -66,6 +66,11 @@ export default function DocumentShow({ document, revisions, quote, invoice, can,
                             {t('documents.actions.duplicate')}
                         </Button>
                     )}
+                    {/* A plain link: the browser opens the PDF itself (not an Inertia visit). */}
+                    <a href={`${base}/pdf`} target="_blank" rel="noreferrer" className={buttonClass({ variant: 'secondary' })}>
+                        <Download className="size-4" />
+                        {t('pdf.download')}
+                    </a>
                     {can.delete && (
                         <Button variant="ghost" icon={<Trash2 className="size-4" />} onClick={() => setDeleting(true)} className="ms-auto">
                             {t('documents.actions.delete')}
