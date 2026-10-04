@@ -85,6 +85,8 @@ class DemoSeeder extends Seeder
         $this->comments();
 
         Carbon::setTestNow();
+        // What the hourly job would have done by now: quotes past their date are expired.
+        app(DocumentWorkflow::class)->expireDue();
         Installer::markInstalled();
         $this->command?->info("Demo company \"{$company->name}\" ready. Log in: php artisan wafiq:login-link owner@demo.wafiq");
     }

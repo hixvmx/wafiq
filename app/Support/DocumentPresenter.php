@@ -62,6 +62,20 @@ final class DocumentPresenter
         ];
     }
 
+    /** Fields only the team may see: tracking, who made it, internal ids. */
+    private const INTERNAL = ['sent_at', 'first_viewed_at', 'last_viewed_at', 'views_count', 'created_by', 'not_viewed_warning', 'is_latest', 'revision'];
+
+    /**
+     * The document for the client's page: everything printed on it, nothing about how the team
+     * tracks it (the page's JSON can be read in the browser, so leaving fields unused isn't enough).
+     *
+     * @return array<string, mixed>
+     */
+    public static function forClient(Document $document): array
+    {
+        return array_diff_key(self::full($document), array_flip(self::INTERNAL));
+    }
+
     /** What lists need. @return array<string, mixed> */
     public static function summary(Document $document): array
     {

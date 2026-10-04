@@ -1,7 +1,7 @@
 import { CheckCircle2, Clock, Eye, EyeOff, Link2, Mail, MessageCircle, XCircle } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { Card } from '@/Components/ui/Card';
-import { formatDateTime, timeAgo } from '@/lib/format';
+import { formatDateTime, ltr, timeAgo } from '@/lib/format';
 import { useT } from '@/lib/i18n';
 
 const CHANNEL_ICONS = { whatsapp: MessageCircle, email: Mail, link: Link2 };
@@ -39,7 +39,7 @@ export function TrackingTimeline({ document, sends }) {
                     const Icon = CHANNEL_ICONS[send.channel] ?? Link2;
                     const title = [
                         t('tracking.sent_via', { channel: t(`share.channels.${send.channel}`) }),
-                        send.recipient && t('tracking.to', { recipient: send.recipient }),
+                        send.recipient && t('tracking.to', { recipient: ltr(send.recipient) }),
                     ]
                         .filter(Boolean)
                         .join(' ');

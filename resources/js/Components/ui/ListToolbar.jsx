@@ -28,7 +28,7 @@ export function ListToolbar({ url, filters, placeholder, types, action }) {
     return (
         <div className="flex flex-wrap items-center gap-3">
             <div className="relative min-w-56 flex-1">
-                <Search className="text-ink-subtle pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2" />
+                <Search className="text-ink-subtle pointer-events-none absolute inset-s-3 top-1/2 size-4 -translate-y-1/2" />
                 <input
                     type="search"
                     value={q}

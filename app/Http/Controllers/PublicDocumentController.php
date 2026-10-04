@@ -39,7 +39,7 @@ class PublicDocumentController extends Controller
 
         return Inertia::render('Public/Document', [
             'token' => $token,
-            'document' => DocumentPresenter::full($document),
+            'document' => DocumentPresenter::forClient($document),
             'state' => $replaced ? 'replaced' : $document->status->value,
             'answer' => [
                 'approved_at' => $document->approved_at?->toIso8601String(),

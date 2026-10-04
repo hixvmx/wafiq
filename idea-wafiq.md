@@ -418,11 +418,12 @@ wafiq/
 - [ ] Update path (migrations only) + `CHANGELOG.md` *(hidden in the section 16 checklist)*
 
 ### Phase 11 — Quality
-- [ ] Feature tests for every flow (auth, permissions, totals, numbering, **status machine**, sending, **tracking & bot filter**, approve / reject, expiry, revisions, payments, emails)
-- [ ] Render check of every page with real data (as in Bazarly)
-- [ ] PDF check: Arabic shaping, numbers, long tables, page breaks
-- [ ] Real-world test: send via WhatsApp and Gmail / Outlook, confirm that previews and scanners **don't** mark documents as Viewed
-- [ ] Manual test on cPanel shared hosting + a real SMTP provider; security pass
+- [x] Feature tests for every flow (220 PHP tests in both editions + 9 JS totals tests: auth, permissions, totals, numbering, status machine, sending, tracking & bot filter, approve / reject, expiry, revisions, emails, PDF, installer, security headers) *(payments: hidden)*
+- [x] Render check of every page with the demo data, desktop + phone, in headless Chrome: no JS errors; fixed phone numbers shown as "966…+" and the lines table cut off on phones (now cards)
+- [x] PDF check: Arabic shaping, numbers, long tables, page breaks
+- [ ] Real-world test: send via WhatsApp and Gmail / Outlook, confirm that previews and scanners **don't** mark documents as Viewed *(needs you: a real phone and inboxes)*
+- [x] Security pass: client page no longer exposes tracking data in its JSON, security headers (no framing, no Referer leak of tracked links, HSTS on HTTPS), Secure session cookie on HTTPS; reviewed escaping, raw SQL, mass assignment, company scoping
+- [ ] Manual test on cPanel shared hosting + a real SMTP provider *(needs you: real hosting)*
 
 ### Phase 12 — Website, docs & Picalica listing
 - [ ] **{domain}** landing page (Arabic), `/docs`, `support@{domain}`

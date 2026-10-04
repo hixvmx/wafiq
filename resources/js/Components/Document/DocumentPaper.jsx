@@ -71,7 +71,37 @@ export function DocumentPaper({ document }) {
                 )}
 
                 {/* Lines */}
-                <div className="-mx-6 overflow-x-auto px-6 sm:mx-0 sm:px-0">
+                {/* Phones: one card per line. Wider screens: the table. */}
+                <ul className="divide-line border-line divide-y border-y sm:hidden">
+                    {document.lines.map((line, i) => (
+                        <li key={line.id} className="flex gap-3 py-3 text-sm">
+                            <span className="text-ink-subtle">{i + 1}</span>
+                            <div className="min-w-0 flex-1">
+                                <p className="font-medium">{line.name}</p>
+                                {line.description && <p className="text-ink-muted mt-0.5 text-xs whitespace-pre-line">{line.description}</p>}
+                                <p className="text-ink-muted mt-1 text-xs">
+                                    <bdi dir="ltr">{line.qty}</bdi> {line.unit} × <bdi dir="ltr">{groupDecimal(line.unit_price)}</bdi>
+                                    {Number(line.discount_percent) > 0 && (
+                                        <>
+                                            {' · '}
+                                            {t('documents.paper.col_discount')} <bdi dir="ltr">{line.discount_percent}%</bdi>
+                                        </>
+                                    )}
+                                    {Number(line.tax_rate) > 0 && (
+                                        <>
+                                            {' · '}
+                                            {t('documents.paper.col_tax')} <bdi dir="ltr">{line.tax_rate}%</bdi>
+                                        </>
+                                    )}
+                                </p>
+                            </div>
+                            <p className="shrink-0 font-semibold" dir="ltr">
+                                {groupDecimal(line.net)}
+                            </p>
+                        </li>
+                    ))}
+                </ul>
+                <div className="hidden sm:block">
                     <table className="w-full min-w-xl text-sm">
                         <thead>
                             <tr className="text-ink-muted border-b-2 border-(--paper-brand) text-xs">

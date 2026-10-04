@@ -3,6 +3,7 @@
 use App\Http\Middleware\EnsureCompanyMember;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\RedirectIfNotInstalled;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -25,6 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Every response, including errors and the installer.
+        $middleware->prepend(SecurityHeaders::class);
+
         $middleware->web(append: [
             RedirectIfNotInstalled::class, // after the session starts: the installer keeps its progress there
             HandleInertiaRequests::class,

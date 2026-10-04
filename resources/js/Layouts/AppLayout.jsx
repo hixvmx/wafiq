@@ -53,7 +53,7 @@ export default function AppLayout({ title, actions, children }) {
                 {menuOpen && (
                     <div className="fixed inset-0 z-40 lg:hidden">
                         <button type="button" className="bg-ink/40 absolute inset-0" onClick={() => setMenuOpen(false)} aria-label={t('common.close')} />
-                        <aside className="bg-card absolute inset-y-0 start-0 flex w-72 max-w-[85%] flex-col shadow-xl">
+                        <aside className="bg-card absolute inset-y-0 inset-s-0 flex w-72 max-w-[85%] flex-col shadow-xl">
                             <div className="flex items-center justify-between pe-3">
                                 <Brand name={company?.name} />
                                 <button
@@ -169,7 +169,7 @@ function NotificationBell({ count }) {
         >
             <Bell className="size-5" />
             {count > 0 && (
-                <span className="bg-danger absolute -end-0.5 -top-0.5 flex min-w-4.5 items-center justify-center rounded-full px-1 text-[0.65rem] leading-4.5 font-bold text-white">
+                <span className="bg-danger absolute -inset-e-0.5 -top-0.5 flex min-w-4.5 items-center justify-center rounded-full px-1 text-[0.65rem] leading-4.5 font-bold text-white">
                     {count > 99 ? '99+' : count}
                 </span>
             )}

@@ -50,6 +50,16 @@ export function timeAgo(iso) {
 }
 
 /**
+ * A left-to-right value (phone, email, number) inside an Arabic sentence built as a string:
+ * wrapped in invisible Unicode isolates so "+966…" keeps its "+" in front.
+ * (For JSX, <bdi dir="ltr"> does the same.)
+ * @param {string} value
+ */
+export function ltr(value) {
+    return `⁦${value}⁩`;
+}
+
+/**
  * Join class names, skipping falsy values.
  * @param {...(string|false|null|undefined)} classes
  */

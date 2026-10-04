@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { useMemo, useRef, useState } from 'react';
 import { Button } from '@/Components/ui/Button';
 import { Avatar, Card } from '@/Components/ui/Card';
-import { cn, formatDate, formatDateTime, timeAgo } from '@/lib/format';
+import { cn, formatDate, formatDateTime, ltr, timeAgo } from '@/lib/format';
 import { useT } from '@/lib/i18n';
 
 const ICONS = {
@@ -84,7 +84,7 @@ function ActivityItem({ activity }) {
         activity.type === 'rejected' && data.reason
             ? t('activity.reason', { reason: data.reason })
             : activity.type === 'sent' && data.recipient
-              ? t('activity.to', { recipient: data.recipient })
+              ? t('activity.to', { recipient: ltr(data.recipient) })
               : null;
 
     return (
@@ -120,7 +120,7 @@ function CommentItem({ comment, members }) {
                         · {timeAgo(comment.at)}
                     </span>
                 </p>
-                <p className="text-ink mt-1 text-sm leading-relaxed break-words whitespace-pre-line">
+                <p className="text-ink mt-1 text-sm leading-relaxed wrap-break-word whitespace-pre-line">
                     <Highlighted text={comment.body} names={members.map((m) => m.name)} />
                 </p>
             </div>
