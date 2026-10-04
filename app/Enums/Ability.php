@@ -16,13 +16,16 @@ enum Ability: string
     case RecordPayments = 'record_payments';
     case ViewAllDocuments = 'view_all_documents';
     case ViewReports = 'view_reports';
+    case ManageClients = 'manage_clients';
+    case ManageItems = 'manage_items';
 
     /** @return list<Role> */
     public function roles(): array
     {
         return match ($this) {
             self::ManageSettings, self::ManageTeam, self::ReviewDocuments => [Role::Owner, Role::Admin],
-            self::CreateDocuments => [Role::Owner, Role::Admin, Role::Accountant, Role::Sales],
+            self::CreateDocuments, self::ManageClients => [Role::Owner, Role::Admin, Role::Accountant, Role::Sales],
+            self::ManageItems => [Role::Owner, Role::Admin, Role::Accountant],
             self::RecordPayments => [Role::Owner, Role::Admin, Role::Accountant],
             self::ViewAllDocuments, self::ViewReports => [Role::Owner, Role::Admin, Role::Accountant, Role::Viewer],
         };

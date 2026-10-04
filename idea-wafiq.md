@@ -195,6 +195,8 @@ We sell the **self-hosted edition on Picalica first**, then launch the **SaaS** 
 | See all documents & tracking | ✅ | ✅ | ✅ | own + shared with them | ✅ |
 | Reports & exports | ✅ | ✅ | ✅ | own | ✅ |
 | Delete documents | ✅ | ✅ | drafts only | own drafts | — |
+| Add / edit clients | ✅ | ✅ | ✅ | ✅ | — |
+| Manage products & services (prices) | ✅ | ✅ | ✅ | — | — |
 
 *One **Owner** (created by the installer). Ownership can be transferred.*
 
@@ -362,9 +364,10 @@ wafiq/
 - [ ] Email settings + **send test email**; reminder and expiry rules; internal review amount limit *(hidden in the section 16 checklist, not in the MVP; mail is configured in `.env` for now)*
 
 ### Phase 3 — Clients & items
-- [ ] Clients CRUD (company / person, **WhatsApp phone with country code**), search, tags, notes, client page (documents, approval history, balance)
-- [ ] Items catalog CRUD + quick search in the line editor
-- [ ] CSV import / export
+- [x] Clients CRUD (company / person, **WhatsApp phone with country code**, stored as +966…), search by name / email / phone
+- [ ] Client tags, notes, client page (documents, approval history, balance) *(hidden in the section 16 checklist)*
+- [x] Items catalog CRUD + quick search in the line editor
+- [ ] CSV import / export *(hidden in the section 16 checklist)*
 
 ### Phase 4 — Documents (quotations & invoices)
 - [ ] Money + TotalsCalculator (PHP) mirrored in `lib/money.js`, shared test cases

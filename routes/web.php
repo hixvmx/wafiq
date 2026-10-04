@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\AcceptInvitationController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CompanyProfileController;
 use App\Http\Controllers\Settings\DocumentDefaultsController;
@@ -38,6 +40,23 @@ Route::get('branding/{company}/{kind}', [BrandingController::class, 'show'])->na
 Route::middleware(['auth', 'member'])->group(function () {
     Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+
+    // Every member can browse clients and the catalog; editing needs the matching permission.
+    Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('clients/search', [ClientController::class, 'search'])->name('clients.search');
+    Route::middleware('can:manage_clients')->group(function () {
+        Route::post('clients', [ClientController::class, 'store'])->name('clients.store');
+        Route::put('clients/{client}', [ClientController::class, 'update'])->name('clients.update');
+        Route::delete('clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
+    });
+
+    Route::get('items', [ItemController::class, 'index'])->name('items.index');
+    Route::get('items/search', [ItemController::class, 'search'])->name('items.search');
+    Route::middleware('can:manage_items')->group(function () {
+        Route::post('items', [ItemController::class, 'store'])->name('items.store');
+        Route::put('items/{item}', [ItemController::class, 'update'])->name('items.update');
+        Route::delete('items/{item}', [ItemController::class, 'destroy'])->name('items.destroy');
+    });
 
     Route::middleware('can:manage_team')->prefix('team')->name('team.')->group(function () {
         Route::get('/', [TeamController::class, 'index'])->name('index');

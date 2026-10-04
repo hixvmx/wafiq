@@ -24,6 +24,8 @@ class PermissionsTest extends TestCase
         'record_payments' => [true,  true,  true,      false, false],
         'view_all_documents' => [true,  true,  true,      false, true],
         'view_reports' => [true,  true,  true,      false, true],
+        'manage_clients' => [true,  true,  true,      true,  false],
+        'manage_items' => [true,  true,  true,      false, false],
     ];
 
     private const ROLES = [Role::Owner, Role::Admin, Role::Accountant, Role::Sales, Role::Viewer];
