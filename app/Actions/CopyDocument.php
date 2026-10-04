@@ -2,7 +2,9 @@
 
 namespace App\Actions;
 
+use App\Enums\ActivityType;
 use App\Enums\DocumentStatus;
+use App\Models\Activity;
 use App\Models\Document;
 use App\Models\User;
 use App\Services\CurrentCompany;
@@ -31,6 +33,7 @@ class CopyDocument
                 ...$this->freshDates($source->type),
             ]);
             $copy->update(['root_id' => $copy->id]);
+            Activity::log($copy, ActivityType::Duplicated, ['from' => $source->displayNumber()], $user);
 
             return $copy;
         });
@@ -49,13 +52,16 @@ class CopyDocument
         return DB::transaction(function () use ($source, $user) {
             $source->update(['is_latest' => false]);
 
-            return $this->copy($source, [
+            $revision = $this->copy($source, [
                 'revision' => $source->revisions()->max('revision') + 1,
                 'root_id' => $source->root_id,
                 'parent_id' => $source->id,
                 'created_by' => $user->id,
                 ...$this->freshDates($source->type),
             ]);
+            Activity::log($revision, ActivityType::Revised, ['revision' => $revision->revision], $user);
+
+            return $revision;
         });
     }
 
@@ -81,6 +87,8 @@ class CopyDocument
                 ...$this->freshDates('invoice'),
             ]);
             $invoice->update(['root_id' => $invoice->id]);
+            Activity::log($invoice, ActivityType::CreatedFromQuote, ['quote' => $quote->displayNumber()], $user);
+            Activity::log($quote, ActivityType::Converted, ['invoice' => $invoice->displayNumber()], $user);
 
             return $invoice;
         });

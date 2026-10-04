@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Contact, FileText, LayoutDashboard, LogOut, Menu, Package, Receipt, Settings, Users, X } from 'lucide-react';
+import { Bell, Contact, FileText, LayoutDashboard, LogOut, Menu, Package, Receipt, Settings, Users, X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Avatar } from '@/Components/ui/Card';
@@ -83,6 +83,7 @@ export default function AppLayout({ title, actions, children }) {
                         </button>
                         <h1 className="text-ink min-w-0 flex-1 truncate text-lg font-bold">{title}</h1>
                         {actions}
+                        <NotificationBell count={auth.unread_notifications ?? 0} />
                     </header>
                     <main className="flex-1 p-4 sm:p-6">{children}</main>
                 </div>
@@ -154,3 +155,26 @@ function UserBox({ user }) {
 }
 
 UserBox.propTypes = { user: PropTypes.shape({ name: PropTypes.string, email: PropTypes.string, avatar: PropTypes.string }).isRequired };
+
+/** Unread in-app notifications (for now: @mentions in comments). */
+function NotificationBell({ count }) {
+    const t = useT();
+
+    return (
+        <Link
+            href="/notifications"
+            className="text-ink-muted hover:bg-surface hover:text-ink relative rounded-lg p-2"
+            aria-label={t('notifications.bell', { count })}
+            title={t('notifications.title')}
+        >
+            <Bell className="size-5" />
+            {count > 0 && (
+                <span className="bg-danger absolute -end-0.5 -top-0.5 flex min-w-4.5 items-center justify-center rounded-full px-1 text-[0.65rem] leading-4.5 font-bold text-white">
+                    {count > 99 ? '99+' : count}
+                </span>
+            )}
+        </Link>
+    );
+}
+
+NotificationBell.propTypes = { count: PropTypes.number.isRequired };

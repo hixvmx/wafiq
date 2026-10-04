@@ -400,9 +400,9 @@ wafiq/
 - [ ] Browser print view *(hidden in the section 16 checklist)*
 
 ### Phase 8 — Collaboration & notifications
-- [ ] Comments with @mentions, assignment, watchers
-- [ ] Activity timeline (team actions + client events)
-- [ ] In-app notifications (bell + page) + per-member email preferences (instant / digest / off) + daily digest
+- [x] Comments with @mentions (email + in-app); author, owner or admin can delete *(assignment, watchers: hidden in the section 16 checklist)*
+- [x] Activity timeline (team actions + client events, across all revisions) merged with the comments
+- [x] In-app notifications (bell + page) for @mentions; queued emails run from the one cron entry (`queue:work --stop-when-empty` every minute) *(other notifications, per-member preferences, daily digest: hidden in the section 16 checklist)*
 
 ### Phase 9 — Dashboard & reports
 - [ ] **Pipeline** (Sent / Viewed / Approved / Rejected / Expired counts and values), approval rate, average time to approval, value waiting for an answer

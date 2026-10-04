@@ -3,10 +3,12 @@
 use App\Http\Controllers\Auth\AcceptInvitationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentPdfController;
 use App\Http\Controllers\DocumentShareController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CompanyProfileController;
@@ -76,7 +78,14 @@ Route::middleware(['auth', 'member'])->group(function () {
             Route::post('{document}/extend', 'extend')->name('extend')->defaults('type', $type);
         });
         Route::get("{$prefix}/{document}/pdf", DocumentPdfController::class)->name("{$prefix}.pdf")->defaults('type', $type);
+        Route::post("{$prefix}/{document}/comments", [CommentController::class, 'store'])->name("{$prefix}.comments.store")->defaults('type', $type);
     }
+
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
+    Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
 
     // Every member can browse clients and the catalog; editing needs the matching permission.
     Route::get('clients', [ClientController::class, 'index'])->name('clients.index');

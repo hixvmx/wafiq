@@ -2,7 +2,9 @@
 
 namespace App\Actions;
 
+use App\Enums\ActivityType;
 use App\Enums\DocumentStatus;
+use App\Models\Activity;
 use App\Models\Document;
 use App\Models\TaxRate;
 use App\Models\User;
@@ -40,8 +42,10 @@ class SaveDocument
                     ...$this->header($type, $data),
                 ]);
                 $document->update(['root_id' => $document->id]);
+                Activity::log($document, ActivityType::Created, [], $user);
             } else {
                 $document->update($this->header($type, $data));
+                Activity::log($document, ActivityType::Updated, [], $user);
             }
 
             $this->saveLines($document, $data['lines']);

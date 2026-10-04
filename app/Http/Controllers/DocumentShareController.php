@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\ShareDocument;
+use App\Enums\ActivityType;
+use App\Models\Activity;
 use App\Models\Document;
 use App\Services\DocumentWorkflow;
 use App\Support\Phone;
@@ -62,6 +64,7 @@ class DocumentShareController extends Controller
 
         $data = $request->validate(['valid_until' => ['required', 'date', 'after_or_equal:today']]);
         $workflow->extend($document, Carbon::parse($data['valid_until']));
+        Activity::log($document, ActivityType::Extended, ['valid_until' => $data['valid_until']], $request->user());
 
         return back()->with('success', __('ui.share.extended'));
     }

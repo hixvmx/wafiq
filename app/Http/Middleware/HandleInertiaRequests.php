@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\Ability;
+use App\Http\Controllers\NotificationController;
 use App\Services\CurrentCompany;
 use App\Support\Edition;
 use Illuminate\Http\Request;
@@ -41,6 +42,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $user?->only('id', 'name', 'email', 'avatar'),
                 'role' => fn () => $user?->currentRole()?->value,
+                'unread_notifications' => fn () => $user && app(CurrentCompany::class)->id()
+                    ? NotificationController::query($request)->whereNull('read_at')->count()
+                    : 0,
                 // e.g. auth.can.manage_team, to show or hide menu items and buttons.
                 'can' => fn () => $user
                     ? collect(Ability::cases())->mapWithKeys(fn (Ability $ability) => [$ability->value => $user->can($ability->value)])

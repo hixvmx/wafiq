@@ -231,6 +231,53 @@ return [
         'deleted' => 'تم الحذف.',
     ],
 
+    'activity' => [
+        'title' => 'النشاط والتعليقات',
+        'empty' => 'لا يوجد نشاط بعد.',
+        'show_all' => 'عرض كل النشاط (:count)',
+        'client' => 'العميل',
+        'system' => 'النظام',
+        'types' => [
+            'created' => ':user أنشأ المستند',
+            'updated' => ':user عدّل المسودة',
+            'duplicated' => ':user أنشأه نسخةً من :from',
+            'revised' => ':user أنشأ الإصدار :revision',
+            'converted' => ':user حوّله إلى الفاتورة :invoice',
+            'created_from_quote' => ':user أنشأها من عرض السعر :quote',
+            'sent' => ':user أرسله عبر :channel',
+            'extended' => ':user مدّد الصلاحية حتى :date',
+            'viewed' => 'فتح العميل المستند (:channel، :device)',
+            'approved' => 'وافق :name على المستند',
+            'rejected' => 'رفض العميل المستند',
+            'expired' => 'انتهت صلاحية المستند',
+        ],
+        'devices' => ['mobile' => 'جوال', 'desktop' => 'كمبيوتر'],
+        'reason' => 'السبب: :reason',
+        'to' => 'إلى :recipient',
+    ],
+
+    'comments' => [
+        'placeholder' => 'اكتب تعليقاً للفريق… استخدم @ للإشارة إلى زميل',
+        'internal' => 'التعليقات داخلية ولا يراها العميل.',
+        'send' => 'تعليق',
+        'delete' => 'حذف التعليق',
+        'no_members' => 'لا يوجد زميل بهذا الاسم.',
+    ],
+
+    'mentions' => [
+        'mail_subject' => ':author أشار إليك في :number',
+        'mail_intro' => 'أشار إليك :author في تعليق على :number:',
+        'mail_action' => 'فتح المستند',
+    ],
+
+    'notifications' => [
+        'title' => 'الإشعارات',
+        'empty' => 'لا توجد إشعارات.',
+        'read_all' => 'تعليم الكل كمقروء',
+        'mention' => ':author أشار إليك في :number',
+        'bell' => 'الإشعارات (:count غير مقروء)',
+    ],
+
     'pdf' => [
         'page' => 'صفحة',
         'download' => 'تحميل PDF',

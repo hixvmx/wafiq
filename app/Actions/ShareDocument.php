@@ -2,7 +2,9 @@
 
 namespace App\Actions;
 
+use App\Enums\ActivityType;
 use App\Mail\DocumentMail;
+use App\Models\Activity;
 use App\Models\Document;
 use App\Models\DocumentSend;
 use App\Models\User;
@@ -58,6 +60,7 @@ class ShareDocument
 
         $send = DB::transaction(function () use ($document, $channel, $data, $user, $token, $message) {
             $this->workflow->markSent($document);
+            Activity::log($document, ActivityType::Sent, ['channel' => $channel, 'recipient' => $data['recipient'] ?? null], $user);
 
             return DocumentSend::create([
                 'document_id' => $document->id,

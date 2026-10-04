@@ -2,6 +2,8 @@
 
 namespace App\Actions;
 
+use App\Enums\ActivityType;
+use App\Models\Activity;
 use App\Models\DocumentSend;
 use App\Models\DocumentView;
 use App\Models\User;
@@ -52,6 +54,11 @@ class RecordView
 
         $send->increment('views_count', 1, ['last_viewed_at' => $now, 'first_viewed_at' => $send->first_viewed_at ?? $now]);
         $this->workflow->markViewed($document);
+        Activity::log($document, ActivityType::Viewed, [
+            'channel' => $send->channel,
+            'recipient' => $send->recipient,
+            'device' => BotDetector::device($userAgent),
+        ]);
 
         return true;
     }

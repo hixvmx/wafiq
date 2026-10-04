@@ -6,10 +6,14 @@ use App\Actions\CopyDocument;
 use App\Actions\SaveDocument;
 use App\Actions\ShareDocument;
 use App\Enums\DocumentStatus;
+use App\Enums\Role;
+use App\Models\Activity;
 use App\Models\Client;
+use App\Models\Comment;
 use App\Models\Document;
 use App\Models\DocumentSend;
 use App\Models\TaxRate;
+use App\Models\User;
 use App\Services\CurrentCompany;
 use App\Services\DocumentWorkflow;
 use App\Support\Digits;
@@ -127,6 +131,12 @@ class DocumentController extends Controller
                 'last_viewed_at' => $send->last_viewed_at?->toIso8601String(),
             ]),
             'sendDefaults' => $canSend ? app(ShareDocument::class)->defaults($document) : null,
+            'feed' => $this->feed($document, $user),
+            // For @mentions: teammates who can open this document.
+            'members' => app(CurrentCompany::class)->get()->users()->whereKeyNot($user->id)->orderBy('name')->get()
+                ->filter(fn (User $member) => $member->can('view', $document))
+                ->map(fn (User $member) => ['id' => $member->id, 'name' => $member->name])
+                ->values(),
             'revisions' => $document->revisions()->get()->map(fn (Document $revision) => [
                 'id' => $revision->id,
                 'number' => $revision->displayNumber(),
@@ -218,6 +228,40 @@ class DocumentController extends Controller
 
         return ($parent ? redirect()->route("{$parent->routePrefix()}.show", $parent) : redirect()->route("{$document->routePrefix()}.index"))
             ->with('success', __('ui.documents.deleted'));
+    }
+
+    /**
+     * Activity and comments of every revision, oldest first: team actions, client events
+     * and the internal discussion in one place.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function feed(Document $document, User $user): array
+    {
+        $ids = Document::where('root_id', $document->root_id)->pluck('id');
+        $canModerate = in_array($user->currentRole(), [Role::Owner, Role::Admin], true);
+
+        $activities = Activity::with('user')->whereIn('document_id', $ids)->get()->map(fn (Activity $activity) => [
+            'key' => "a{$activity->id}",
+            'kind' => 'activity',
+            'type' => $activity->type->value,
+            'client_event' => $activity->type->isClientEvent(),
+            'user' => $activity->user?->name,
+            'data' => $activity->data ?? (object) [],
+            'at' => $activity->created_at->toIso8601String(),
+        ]);
+
+        $comments = Comment::with('user')->whereIn('document_id', $ids)->get()->map(fn (Comment $comment) => [
+            'key' => "c{$comment->id}",
+            'kind' => 'comment',
+            'id' => $comment->id,
+            'user' => $comment->user?->name,
+            'body' => $comment->body,
+            'at' => $comment->created_at->toIso8601String(),
+            'can_delete' => $comment->user_id === $user->id || $canModerate,
+        ]);
+
+        return $activities->concat($comments)->sortBy('at')->values()->all();
     }
 
     /** Documents of this type the user may see (latest revisions only). */

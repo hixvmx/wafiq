@@ -6,6 +6,7 @@ import { DocumentPaper } from '@/Components/Document/DocumentPaper';
 import { SendDialog } from '@/Components/Document/SendDialog';
 import { StatusBadge } from '@/Components/Document/StatusBadge';
 import { TrackingTimeline } from '@/Components/Document/TrackingTimeline';
+import { ActivityFeed } from '@/Components/Document/ActivityFeed';
 import { Button, ButtonLink, buttonClass } from '@/Components/ui/Button';
 import { ConfirmDialog } from '@/Components/ui/ConfirmDialog';
 import { Dialog } from '@/Components/ui/Dialog';
@@ -16,7 +17,7 @@ import { useT } from '@/lib/i18n';
 import { prefix } from './Form';
 
 /** The team's view of one document: the paper, its status and what can be done next. */
-export default function DocumentShow({ document, revisions, quote, invoice, can, sends, sendDefaults }) {
+export default function DocumentShow({ document, revisions, quote, invoice, can, sends, sendDefaults, feed, members }) {
     const t = useT();
     const base = `/${prefix(document.type)}/${document.id}`;
     const [deleting, setDeleting] = useState(false);
@@ -122,6 +123,8 @@ export default function DocumentShow({ document, revisions, quote, invoice, can,
                 {document.status !== 'draft' && <TrackingTimeline document={document} sends={sends} />}
 
                 <DocumentPaper document={document} />
+
+                <ActivityFeed feed={feed} members={members} commentUrl={`${base}/comments`} />
             </div>
 
             {sendDefaults && (
@@ -158,6 +161,8 @@ DocumentShow.propTypes = {
     can: PropTypes.objectOf(PropTypes.bool).isRequired,
     sends: PropTypes.array.isRequired,
     sendDefaults: PropTypes.object,
+    feed: PropTypes.array.isRequired,
+    members: PropTypes.array.isRequired,
 };
 
 function ExtendForm({ url, current, onDone }) {

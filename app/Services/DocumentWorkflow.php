@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Enums\ActivityType;
 use App\Enums\DocumentStatus;
+use App\Models\Activity;
 use App\Models\Document;
 use App\Support\DocumentPresenter;
 use Illuminate\Support\Carbon;
@@ -84,19 +86,34 @@ class DocumentWorkflow
     /** Sent / Viewed past their validity date → Expired. Returns how many changed. */
     public function expireDue(): int
     {
-        return Document::withoutGlobalScope('company')
+        $due = Document::withoutGlobalScope('company')
             ->whereIn('status', self::OPEN)
             ->whereNotNull('valid_until')
             ->where('valid_until', '<', Carbon::today()->toDateString())
-            ->update(['status' => DocumentStatus::Expired, 'expired_at' => now()]);
+            ->get();
+
+        return $due->filter(fn (Document $document) => $this->expire($document))->count();
     }
 
     /** Expires this one document if its date has passed (the client page doesn't wait for the scheduler). */
     public function expireIfDue(Document $document): void
     {
         if (in_array($document->status, self::OPEN, true) && $this->isPastValidity($document)) {
-            $document->update(['status' => DocumentStatus::Expired, 'expired_at' => now()]);
+            $this->expire($document);
         }
+    }
+
+    private function expire(Document $document): bool
+    {
+        $updated = Document::withoutGlobalScope('company')->whereKey($document->id)->whereIn('status', self::OPEN)
+            ->update(['status' => DocumentStatus::Expired, 'expired_at' => now()]);
+
+        if ($updated) {
+            $document->refresh();
+            Activity::log($document, ActivityType::Expired);
+        }
+
+        return $updated === 1;
     }
 
     /** New validity date. An expired document goes back to Sent so it can be resent. */
@@ -146,6 +163,12 @@ class DocumentWorkflow
 
         $updated = Document::whereKey($document->id)->whereIn('status', self::OPEN)->update($changes);
         $document->refresh();
+
+        if ($updated === 1) {
+            $document->status === DocumentStatus::Approved
+                ? Activity::log($document, ActivityType::Approved, ['name' => $document->approved_by_name])
+                : Activity::log($document, ActivityType::Rejected, ['reason' => $document->rejection_reason]);
+        }
 
         return $updated === 1;
     }
