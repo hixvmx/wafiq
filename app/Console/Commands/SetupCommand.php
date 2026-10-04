@@ -2,20 +2,19 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\Role;
+use App\Actions\CreateCompany;
 use App\Models\Company;
-use App\Models\User;
 use App\Services\CurrentCompany;
 use App\Services\MagicLink;
 use App\Support\Edition;
+use App\Support\Installer;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 /**
- * Creates the company and its owner. Stand-in for the web installer (Phase 10),
- * which will reuse the same steps.
+ * Creates the company and its owner from the command line: for servers where the web
+ * installer can't run (and for development). Same steps as the installer's last screen.
  */
 class SetupCommand extends Command
 {
@@ -54,15 +53,9 @@ class SetupCommand extends Command
             return self::FAILURE;
         }
 
-        [$company, $owner] = DB::transaction(function () use ($data) {
-            $company = Company::create(['name' => $data['company'], 'email' => $data['email']]);
-            $owner = User::firstOrCreate(['email' => $data['email']], ['name' => $data['name']]);
-            $company->addMember($owner, Role::Owner);
-
-            return [$company, $owner];
-        });
-
+        [$company, $owner] = app(CreateCompany::class)->handle($data);
         $current->set($company);
+        Installer::markInstalled();
 
         $this->info("Company \"{$company->name}\" created with owner {$owner->email}.");
         $this->line('First login link (valid '.config('wafiq.login_link_minutes').' minutes):');

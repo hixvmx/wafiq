@@ -16,6 +16,9 @@ abstract class TestCase extends BaseTestCase
 
         // Feature tests don't need compiled assets (public/build may not exist, e.g. in CI).
         $this->withoutVite();
+
+        // Treated as installed, without the marker file or a database check (InstallerTest turns this off).
+        config(['wafiq.force_installed' => true]);
     }
 
     /**

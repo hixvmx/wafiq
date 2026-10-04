@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('CACHE_STORE', 'database'),
+    'default' => env('CACHE_STORE', 'file'), // file: works before the installer has set up a database
 
     /*
     |--------------------------------------------------------------------------

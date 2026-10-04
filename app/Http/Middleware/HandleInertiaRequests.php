@@ -6,6 +6,7 @@ use App\Enums\Ability;
 use App\Http\Controllers\NotificationController;
 use App\Services\CurrentCompany;
 use App\Support\Edition;
+use App\Support\Installer;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,7 +36,8 @@ class HandleInertiaRequests extends Middleware
                 'edition' => Edition::name(),
             ],
             'company' => function () {
-                $company = app(CurrentCompany::class)->get();
+                // Before installation there may be no database to ask.
+                $company = Edition::isSaas() || Installer::isInstalled() ? app(CurrentCompany::class)->get() : null;
 
                 return $company ? [...$company->only('id', 'name', 'currency'), 'logo_url' => $company->imageUrl('logo')] : null;
             },

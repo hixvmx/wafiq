@@ -2,6 +2,8 @@
 
 use App\Http\Middleware\EnsureCompanyMember;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\RedirectIfNotInstalled;
+use Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,8 +26,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
+            RedirectIfNotInstalled::class, // after the session starts: the installer keeps its progress there
             HandleInertiaRequests::class,
         ]);
+
+        // Before "auth" (which would send a fresh copy to /login), after the session has started.
+        $middleware->prependToPriorityList(AuthenticatesRequests::class, RedirectIfNotInstalled::class);
 
         $middleware->alias([
             'member' => EnsureCompanyMember::class,

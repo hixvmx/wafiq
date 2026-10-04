@@ -411,11 +411,11 @@ wafiq/
 - [ ] Full backup export (owner) *(hidden in the section 16 checklist)*
 
 ### Phase 10 — Buyer experience
-- [ ] **Web installer** (requirements → database → company → owner → mail test → done)
-- [ ] Demo seed data (Arabic clients, items, documents in every status, realistic tracking history)
-- [ ] **Demo mode** (read-only + nightly reset) → deploy on `demo.{domain}`
-- [ ] Release script: clean zip (no `.env`, `.git`, `node_modules`), built assets, vendor included, **SaaS folders removed** (`app/Saas`, `routes/saas.php`, SaaS pages), `APP_EDITION=self_hosted` forced
-- [ ] Update path (migrations only) + `CHANGELOG.md`
+- [x] **Web installer** (requirements → MySQL database + tables → company & owner → mail test or skip → done with the cron line → logged in). APP_KEY generated on the first visit; works with no `.env` at all. Tested end to end on the real zip in a browser
+- [x] Demo seed data: `php artisan migrate:fresh --seed --seeder=DemoSeeder` (team of 5, 12 clients, 15 items, 24 documents in every status with real send / view / answer history, a v2 revision, invoices, comments)
+- [ ] **Demo mode** (read-only + nightly reset) → deploy on `demo.{domain}` *(demo mode hidden in the section 16 checklist; the demo data is ready)*
+- [x] Release script: `php scripts/build-release.php 1.0.0` → `build/wafiq-1.0.0.zip` (no `.env` / `.git` / `node_modules` / tests / dev packages, built assets, vendor, production `.env.example` from `deploy/env.example`, **SaaS folders removed**, `APP_EDITION=self_hosted`; it checks itself and fails if anything leaks)
+- [ ] Update path (migrations only) + `CHANGELOG.md` *(hidden in the section 16 checklist)*
 
 ### Phase 11 — Quality
 - [ ] Feature tests for every flow (auth, permissions, totals, numbering, **status machine**, sending, **tracking & bot filter**, approve / reject, expiry, revisions, payments, emails)

@@ -8,6 +8,9 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    // Tests set this to true / false to skip the "is it installed?" check (null = really check).
+    'force_installed' => null,
+
     // A magic login link works once, for this many minutes.
     'login_link_minutes' => 15,
 

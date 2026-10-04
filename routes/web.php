@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentPdfController;
 use App\Http\Controllers\DocumentShareController;
+use App\Http\Controllers\InstallController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PublicDocumentController;
@@ -21,6 +22,20 @@ use App\Http\Controllers\Team\InvitationController;
 use App\Http\Controllers\Team\MemberController;
 use App\Http\Controllers\Team\TeamController;
 use Illuminate\Support\Facades\Route;
+
+/*
+| Web installer (only until the copy is installed; see RedirectIfNotInstalled).
+*/
+Route::prefix('install')->controller(InstallController::class)->middleware('throttle:30,1')->group(function () {
+    Route::get('/', 'show')->name('install');
+    Route::post('requirements', 'requirements');
+    Route::post('database', 'database');
+    Route::post('company', 'company');
+    Route::post('mail', 'mail');
+    Route::post('mail/skip', 'skipMail');
+    Route::post('finish', 'finish');
+    Route::post('restart', 'restart');
+});
 
 /*
 | Login with a magic link (no passwords).
