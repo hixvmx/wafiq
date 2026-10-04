@@ -48,9 +48,15 @@ export default function ClientsIndex({ clients, filters, phoneCodes }) {
                     )
                 ) : (
                     <Card>
-                        <ul className="divide-y divide-line">
+                        <ul className="divide-line divide-y">
                             {clients.data.map((client) => (
-                                <ClientRow key={client.id} client={client} canManage={canManage} onEdit={() => setEditing(client)} onDelete={() => setDeleting(client)} />
+                                <ClientRow
+                                    key={client.id}
+                                    client={client}
+                                    canManage={canManage}
+                                    onEdit={() => setEditing(client)}
+                                    onDelete={() => setDeleting(client)}
+                                />
                             ))}
                         </ul>
                     </Card>
@@ -84,15 +90,15 @@ function ClientRow({ client, canManage, onEdit, onDelete }) {
 
     return (
         <li className="flex items-center gap-4 px-5 py-4">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+            <span className="bg-brand-50 text-brand-700 flex size-10 shrink-0 items-center justify-center rounded-full">
                 <Icon className="size-5" />
             </span>
             <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-ink">
+                <p className="text-ink truncate text-sm font-semibold">
                     {client.name}
-                    {client.contact_name && <span className="font-normal text-ink-subtle"> · {client.contact_name}</span>}
+                    {client.contact_name && <span className="text-ink-subtle font-normal"> · {client.contact_name}</span>}
                 </p>
-                <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-muted">
+                <div className="text-ink-muted mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs">
                     {client.phone && (
                         <span className="inline-flex items-center gap-1" dir="ltr">
                             <Phone className="size-3.5" />

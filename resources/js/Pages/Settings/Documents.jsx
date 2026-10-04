@@ -24,7 +24,12 @@ export default function Documents({ documents }) {
             <form onSubmit={submit} className="space-y-6">
                 {Object.entries(DAYS).map(([type, days]) => (
                     <SettingsCard key={type} title={t(`settings.types.${type}`)}>
-                        <Field label={t(`settings.documents.${days.key}`)} hint={t(`settings.documents.${days.key}_hint`)} error={error(type, days.key)} className="sm:w-72">
+                        <Field
+                            label={t(`settings.documents.${days.key}`)}
+                            hint={t(`settings.documents.${days.key}_hint`)}
+                            error={error(type, days.key)}
+                            className="sm:w-72"
+                        >
                             {(id, describedBy) => (
                                 <TextInput
                                     id={id}
@@ -39,8 +44,22 @@ export default function Documents({ documents }) {
                             )}
                         </Field>
                         {['terms', 'notes'].map((key) => (
-                            <Field key={key} label={t(`settings.documents.${key}`)} error={error(type, key)} optional={key === 'notes'} optionalLabel={t('common.optional')}>
-                                {(id) => <TextArea id={id} className="min-h-24" value={form.data[type][key] ?? ''} onChange={(e) => set(type, key, e.target.value)} error={error(type, key)} />}
+                            <Field
+                                key={key}
+                                label={t(`settings.documents.${key}`)}
+                                error={error(type, key)}
+                                optional={key === 'notes'}
+                                optionalLabel={t('common.optional')}
+                            >
+                                {(id) => (
+                                    <TextArea
+                                        id={id}
+                                        className="min-h-24"
+                                        value={form.data[type][key] ?? ''}
+                                        onChange={(e) => set(type, key, e.target.value)}
+                                        error={error(type, key)}
+                                    />
+                                )}
                             </Field>
                         ))}
                     </SettingsCard>

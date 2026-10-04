@@ -22,10 +22,10 @@ export function TotalsBox({ currency, subtotal, discount, discountLabel, taxable
             {taxes.map((tax) => (
                 <Row key={`${tax.name}-${tax.rate}`} label={`${tax.name ?? t('documents.totals.tax')} ${tax.rate}%`} value={tax.amount} />
             ))}
-            <div className="flex items-baseline justify-between border-t border-line pt-3">
-                <dt className="text-base font-bold text-ink">{t('documents.totals.total')}</dt>
-                <dd className="text-lg font-bold text-ink" dir="ltr">
-                    {total} <span className="text-sm font-semibold text-ink-muted">{currency}</span>
+            <div className="border-line flex items-baseline justify-between border-t pt-3">
+                <dt className="text-ink text-base font-bold">{t('documents.totals.total')}</dt>
+                <dd className="text-ink text-lg font-bold" dir="ltr">
+                    {total} <span className="text-ink-muted text-sm font-semibold">{currency}</span>
                 </dd>
             </div>
         </dl>
@@ -47,7 +47,7 @@ function Row({ label, value }) {
     return (
         <div className="flex items-baseline justify-between gap-4">
             <dt className="text-ink-muted">{label}</dt>
-            <dd className="font-medium text-ink" dir="ltr">
+            <dd className="text-ink font-medium" dir="ltr">
                 {value}
             </dd>
         </div>

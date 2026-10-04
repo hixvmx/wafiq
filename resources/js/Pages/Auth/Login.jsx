@@ -14,9 +14,9 @@ export default function Login({ sentTo, minutes }) {
         return (
             <AuthLayout title={t('auth.check_inbox')} footer={t('auth.no_email_hint')}>
                 <div className="text-center">
-                    <MailCheck className="mx-auto size-12 text-brand-600" />
-                    <p className="mt-4 text-sm leading-relaxed text-ink-muted">{t('auth.link_sent', { email: sentTo, minutes })}</p>
-                    <Link href="/login" className="mt-6 inline-block text-sm font-semibold text-brand-700 hover:underline">
+                    <MailCheck className="text-brand-600 mx-auto size-12" />
+                    <p className="text-ink-muted mt-4 text-sm leading-relaxed">{t('auth.link_sent', { email: sentTo, minutes })}</p>
+                    <Link href="/login" className="text-brand-700 mt-6 inline-block text-sm font-semibold hover:underline">
                         {t('auth.use_other_email')}
                     </Link>
                 </div>

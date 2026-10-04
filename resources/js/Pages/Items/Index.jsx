@@ -57,33 +57,45 @@ export default function ItemsIndex({ items, filters, taxRates, currencies, defau
                     )
                 ) : (
                     <Card>
-                        <ul className="divide-y divide-line">
+                        <ul className="divide-line divide-y">
                             {items.data.map((item) => {
                                 const Icon = item.type === 'product' ? Package : Wrench;
                                 return (
                                     <li key={item.id} className="flex items-center gap-4 px-5 py-4">
-                                        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+                                        <span className="bg-brand-50 text-brand-700 flex size-10 shrink-0 items-center justify-center rounded-full">
                                             <Icon className="size-5" />
                                         </span>
                                         <div className="min-w-0 flex-1">
-                                            <p className="truncate text-sm font-semibold text-ink">{item.name}</p>
-                                            {item.description && <p className="mt-0.5 truncate text-xs text-ink-subtle">{item.description}</p>}
+                                            <p className="text-ink truncate text-sm font-semibold">{item.name}</p>
+                                            {item.description && <p className="text-ink-subtle mt-0.5 truncate text-xs">{item.description}</p>}
                                         </div>
                                         <div className="shrink-0 text-end">
-                                            <p className="text-sm font-semibold text-ink" dir="ltr">
+                                            <p className="text-ink text-sm font-semibold" dir="ltr">
                                                 {formatMoney(item.price, item.currency)}
                                             </p>
-                                            <p className="mt-0.5 flex justify-end gap-1.5 text-xs text-ink-subtle">
+                                            <p className="text-ink-subtle mt-0.5 flex justify-end gap-1.5 text-xs">
                                                 {item.unit && <span>/ {item.unit}</span>}
                                                 {taxLabel(item.tax_rate_id) && <Badge>{taxLabel(item.tax_rate_id)}</Badge>}
                                             </p>
                                         </div>
                                         {canManage && (
                                             <div className="flex shrink-0 gap-1">
-                                                <Button variant="ghost" size="sm" onClick={() => setEditing(item)} aria-label={t('common.edit')} title={t('common.edit')}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => setEditing(item)}
+                                                    aria-label={t('common.edit')}
+                                                    title={t('common.edit')}
+                                                >
                                                     <Pencil className="size-4" />
                                                 </Button>
-                                                <Button variant="ghost" size="sm" onClick={() => setDeleting(item)} aria-label={t('common.delete')} title={t('common.delete')}>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => setDeleting(item)}
+                                                    aria-label={t('common.delete')}
+                                                    title={t('common.delete')}
+                                                >
                                                     <Trash2 className="size-4" />
                                                 </Button>
                                             </div>
@@ -178,10 +190,25 @@ function ItemForm({ item, taxRates, currencies, defaultCurrency, units, onDone }
             </div>
 
             <Field label={t('items.name')} error={form.errors.name}>
-                {(id) => <TextInput id={id} required autoFocus value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} error={form.errors.name} />}
+                {(id) => (
+                    <TextInput
+                        id={id}
+                        required
+                        autoFocus
+                        value={form.data.name}
+                        onChange={(e) => form.setData('name', e.target.value)}
+                        error={form.errors.name}
+                    />
+                )}
             </Field>
 
-            <Field label={t('items.description')} hint={t('items.description_hint')} error={form.errors.description} optional optionalLabel={t('common.optional')}>
+            <Field
+                label={t('items.description')}
+                hint={t('items.description_hint')}
+                error={form.errors.description}
+                optional
+                optionalLabel={t('common.optional')}
+            >
                 {(id, describedBy) => (
                     <TextArea
                         id={id}
@@ -224,7 +251,13 @@ function ItemForm({ item, taxRates, currencies, defaultCurrency, units, onDone }
                 <Field label={t('items.unit')} error={form.errors.unit}>
                     {(id) => (
                         <>
-                            <TextInput id={id} list="unit-suggestions" value={form.data.unit} onChange={(e) => form.setData('unit', e.target.value)} error={form.errors.unit} />
+                            <TextInput
+                                id={id}
+                                list="unit-suggestions"
+                                value={form.data.unit}
+                                onChange={(e) => form.setData('unit', e.target.value)}
+                                error={form.errors.unit}
+                            />
                             <datalist id="unit-suggestions">
                                 {units.map((unit) => (
                                     <option key={unit} value={unit} />
@@ -237,7 +270,12 @@ function ItemForm({ item, taxRates, currencies, defaultCurrency, units, onDone }
 
             <Field label={t('items.tax')} error={form.errors.tax_rate_id}>
                 {(id) => (
-                    <Select id={id} value={form.data.tax_rate_id} onChange={(e) => form.setData('tax_rate_id', e.target.value ? Number(e.target.value) : '')} error={form.errors.tax_rate_id}>
+                    <Select
+                        id={id}
+                        value={form.data.tax_rate_id}
+                        onChange={(e) => form.setData('tax_rate_id', e.target.value ? Number(e.target.value) : '')}
+                        error={form.errors.tax_rate_id}
+                    >
                         <option value="">
                             {t('items.default_tax')}
                             {defaultTax ? ` (${defaultTax.name} ${defaultTax.rate}%)` : ''}
@@ -251,7 +289,7 @@ function ItemForm({ item, taxRates, currencies, defaultCurrency, units, onDone }
                 )}
             </Field>
 
-            <div className="flex justify-end gap-2 border-t border-line pt-4">
+            <div className="border-line flex justify-end gap-2 border-t pt-4">
                 <Button variant="secondary" onClick={onDone}>
                     {t('common.cancel')}
                 </Button>

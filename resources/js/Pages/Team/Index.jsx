@@ -32,27 +32,36 @@ export default function TeamIndex({ members, invitations, assignableRoles }) {
     return (
         <AppLayout title={t('team.title')}>
             <div className="mx-auto max-w-4xl space-y-6">
-                <p className="text-sm text-ink-muted">{t('team.subtitle')}</p>
+                <p className="text-ink-muted text-sm">{t('team.subtitle')}</p>
 
                 <InviteForm assignableRoles={assignableRoles} />
 
                 <Card>
-                    <h2 className="border-b border-line px-5 py-4 text-base font-bold text-ink">
+                    <h2 className="border-line text-ink border-b px-5 py-4 text-base font-bold">
                         {t('team.members')} <span className="text-ink-subtle">({members.length})</span>
                     </h2>
-                    <ul className="divide-y divide-line">
+                    <ul className="divide-line divide-y">
                         {members.map((member) => (
-                            <MemberRow key={member.id} member={member} assignableRoles={assignableRoles} onRemove={() => setConfirming({ type: 'member', item: member })} />
+                            <MemberRow
+                                key={member.id}
+                                member={member}
+                                assignableRoles={assignableRoles}
+                                onRemove={() => setConfirming({ type: 'member', item: member })}
+                            />
                         ))}
                     </ul>
                 </Card>
 
                 {invitations.length > 0 && (
                     <Card>
-                        <h2 className="border-b border-line px-5 py-4 text-base font-bold text-ink">{t('team.pending')}</h2>
-                        <ul className="divide-y divide-line">
+                        <h2 className="border-line text-ink border-b px-5 py-4 text-base font-bold">{t('team.pending')}</h2>
+                        <ul className="divide-line divide-y">
                             {invitations.map((invitation) => (
-                                <InvitationRow key={invitation.id} invitation={invitation} onRevoke={() => setConfirming({ type: 'invitation', item: invitation })} />
+                                <InvitationRow
+                                    key={invitation.id}
+                                    invitation={invitation}
+                                    onRevoke={() => setConfirming({ type: 'invitation', item: invitation })}
+                                />
                             ))}
                         </ul>
                     </Card>
@@ -93,8 +102,8 @@ function InviteForm({ assignableRoles }) {
 
     return (
         <Card className="p-5">
-            <h2 className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
-                <UserPlus className="size-5 text-brand-600" />
+            <h2 className="text-ink mb-4 flex items-center gap-2 text-base font-bold">
+                <UserPlus className="text-brand-600 size-5" />
                 {t('team.invite_title')}
             </h2>
             <form onSubmit={submit} className="grid gap-4 sm:grid-cols-[1fr_12rem_auto] sm:items-start">
@@ -113,7 +122,13 @@ function InviteForm({ assignableRoles }) {
                 </Field>
                 <Field label={t('team.role')} error={form.errors.role} hint={t(`team.role_hints.${form.data.role}`)}>
                     {(id, describedBy) => (
-                        <Select id={id} value={form.data.role} onChange={(e) => form.setData('role', e.target.value)} error={form.errors.role} aria-describedby={describedBy}>
+                        <Select
+                            id={id}
+                            value={form.data.role}
+                            onChange={(e) => form.setData('role', e.target.value)}
+                            error={form.errors.role}
+                            aria-describedby={describedBy}
+                        >
                             {assignableRoles.map((role) => (
                                 <option key={role} value={role}>
                                     {t(`roles.${role}`)}
@@ -142,11 +157,11 @@ function MemberRow({ member, assignableRoles, onRemove }) {
         <li className="flex flex-wrap items-center gap-3 px-5 py-4">
             <Avatar src={member.avatar} name={member.name} />
             <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-2 truncate text-sm font-semibold text-ink">
+                <p className="text-ink flex items-center gap-2 truncate text-sm font-semibold">
                     {member.name}
                     {member.is_me && <Badge tone="brand">{t('team.you')}</Badge>}
                 </p>
-                <p className="truncate text-xs text-ink-subtle">
+                <p className="text-ink-subtle truncate text-xs">
                     <span dir="ltr">{member.email}</span>
                     {' · '}
                     {member.last_login_at ? t('team.last_login', { time: timeAgo(member.last_login_at) }) : t('team.never_logged_in')}
@@ -193,10 +208,10 @@ function InvitationRow({ invitation, onRevoke }) {
     return (
         <li className="flex flex-wrap items-center gap-3 px-5 py-4">
             <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-ink" dir="ltr">
+                <p className="text-ink truncate text-sm font-semibold" dir="ltr">
                     {invitation.email}
                 </p>
-                <p className="mt-0.5 flex items-center gap-2 text-xs text-ink-subtle">
+                <p className="text-ink-subtle mt-0.5 flex items-center gap-2 text-xs">
                     {t(`roles.${invitation.role}`)}
                     {' · '}
                     {invitation.expired ? <Badge tone="warning">{t('team.expired')}</Badge> : t('team.expires', { time: timeAgo(invitation.expires_at) })}

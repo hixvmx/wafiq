@@ -11,13 +11,13 @@ export default function AuthLayout({ title, subtitle, footer, children }) {
         <>
             <Head title={title} />
             <main className="flex min-h-screen flex-col items-center justify-center px-4 py-10">
-                <p className="mb-6 text-xl font-bold text-ink">{company?.name ?? app.name}</p>
+                <p className="text-ink mb-6 text-xl font-bold">{company?.name ?? app.name}</p>
                 <Card className="w-full max-w-md p-6 sm:p-8">
-                    <h1 className="text-2xl font-bold text-ink">{title}</h1>
-                    {subtitle && <p className="mt-1 mb-6 text-sm text-ink-muted">{subtitle}</p>}
+                    <h1 className="text-ink text-2xl font-bold">{title}</h1>
+                    {subtitle && <p className="text-ink-muted mt-1 mb-6 text-sm">{subtitle}</p>}
                     {children}
                 </Card>
-                {footer && <p className="mt-5 text-center text-sm text-ink-muted">{footer}</p>}
+                {footer && <p className="text-ink-muted mt-5 text-center text-sm">{footer}</p>}
             </main>
             <Toaster />
         </>

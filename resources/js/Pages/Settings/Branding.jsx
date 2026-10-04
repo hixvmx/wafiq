@@ -35,7 +35,7 @@ export default function Branding({ brandColor, images }) {
                                     type="color"
                                     value={form.data.brand_color}
                                     onChange={(e) => form.setData('brand_color', e.target.value)}
-                                    className="h-11 w-14 cursor-pointer rounded-xl border border-line-strong bg-card p-1"
+                                    className="border-line-strong bg-card h-11 w-14 cursor-pointer rounded-xl border p-1"
                                     aria-label={t('settings.branding.color')}
                                 />
                                 <TextInput
@@ -90,15 +90,15 @@ function ImageSlot({ kind, url }) {
     const remove = () => router.delete(`/settings/branding/${kind}`, { preserveScroll: true });
 
     return (
-        <div className="flex flex-col rounded-xl border border-line p-4">
-            <p className="text-sm font-semibold text-ink">{t(`settings.branding.images.${kind}`)}</p>
-            <p className="mt-0.5 text-xs text-ink-subtle">{t(`settings.branding.image_hints.${kind}`)}</p>
+        <div className="border-line flex flex-col rounded-xl border p-4">
+            <p className="text-ink text-sm font-semibold">{t(`settings.branding.images.${kind}`)}</p>
+            <p className="text-ink-subtle mt-0.5 text-xs">{t(`settings.branding.image_hints.${kind}`)}</p>
 
             <div className="my-4 flex h-28 items-center justify-center rounded-lg bg-[repeating-conic-gradient(#f4f4f5_0_25%,#fff_0_50%)] bg-[length:16px_16px]">
                 {url ? (
                     <img src={url} alt={t(`settings.branding.images.${kind}`)} className="max-h-24 max-w-full object-contain" />
                 ) : (
-                    <span className="flex flex-col items-center gap-1 text-xs text-ink-subtle">
+                    <span className="text-ink-subtle flex flex-col items-center gap-1 text-xs">
                         <ImageIcon className="size-6" />
                         {t('settings.branding.empty')}
                     </span>
@@ -106,14 +106,21 @@ function ImageSlot({ kind, url }) {
             </div>
 
             {error && (
-                <p className="mb-2 text-xs font-medium text-danger" role="alert">
+                <p className="text-danger mb-2 text-xs font-medium" role="alert">
                     {error}
                 </p>
             )}
 
             <div className="mt-auto flex gap-2">
                 <input ref={input} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" onChange={(e) => upload(e.target.files[0])} />
-                <Button variant="secondary" size="sm" className="flex-1" icon={<Upload className="size-4" />} disabled={uploading} onClick={() => input.current.click()}>
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    className="flex-1"
+                    icon={<Upload className="size-4" />}
+                    disabled={uploading}
+                    onClick={() => input.current.click()}
+                >
                     {uploading ? t('settings.branding.uploading') : url ? t('settings.branding.replace') : t('settings.branding.upload')}
                 </Button>
                 {url && (

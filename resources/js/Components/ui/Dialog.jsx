@@ -20,18 +20,23 @@ export function Dialog({ open, title, onClose, children, footer, size = 'md' }) 
             ref={ref}
             onClose={onClose}
             onClick={(e) => e.target === ref.current && onClose()}
-            className={`m-auto w-[calc(100%-2rem)] ${size === 'lg' ? 'max-w-2xl' : 'max-w-lg'} rounded-card bg-card p-0 shadow-2xl backdrop:bg-ink/50`}
+            className={`m-auto w-[calc(100%-2rem)] ${size === 'lg' ? 'max-w-2xl' : 'max-w-lg'} rounded-card bg-card backdrop:bg-ink/50 p-0 shadow-2xl`}
         >
             {open && (
                 <div className="flex max-h-[calc(100dvh-2rem)] flex-col">
-                    <header className="flex items-center justify-between gap-4 border-b border-line px-5 py-4">
-                        <h2 className="text-base font-bold text-ink">{title}</h2>
-                        <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-ink-subtle hover:bg-surface hover:text-ink" aria-label={t('common.close')}>
+                    <header className="border-line flex items-center justify-between gap-4 border-b px-5 py-4">
+                        <h2 className="text-ink text-base font-bold">{title}</h2>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="text-ink-subtle hover:bg-surface hover:text-ink rounded-lg p-1.5"
+                            aria-label={t('common.close')}
+                        >
                             <X className="size-5" />
                         </button>
                     </header>
                     <div className="overflow-y-auto p-5">{children}</div>
-                    {footer && <footer className="flex justify-end gap-2 border-t border-line px-5 py-4">{footer}</footer>}
+                    {footer && <footer className="border-line flex justify-end gap-2 border-t px-5 py-4">{footer}</footer>}
                 </div>
             )}
         </dialog>

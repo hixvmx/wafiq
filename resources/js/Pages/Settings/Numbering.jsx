@@ -8,7 +8,9 @@ const TYPES = ['quote', 'invoice'];
 
 /** Same rule as App\Services\NumberSequence::format(). */
 function formatNumber(format, year) {
-    return [format.prefix || null, format.include_year ? year : null, String(format.next_number || 1).padStart(Number(format.padding), '0')].filter(Boolean).join('-');
+    return [format.prefix || null, format.include_year ? year : null, String(format.next_number || 1).padStart(Number(format.padding), '0')]
+        .filter(Boolean)
+        .join('-');
 }
 
 export default function Numbering({ numbering, year }) {
@@ -30,8 +32,8 @@ export default function Numbering({ numbering, year }) {
                     const data = form.data[type];
                     return (
                         <SettingsCard key={type} title={t(`settings.types.${type}`)} intro={type === 'quote' ? t('settings.numbering.intro') : undefined}>
-                            <p className="rounded-xl bg-brand-50 px-4 py-3 text-sm text-brand-800">
-                                {t('settings.numbering.preview')} 
+                            <p className="bg-brand-50 text-brand-800 rounded-xl px-4 py-3 text-sm">
+                                {t('settings.numbering.preview')}
                                 <span className="font-mono font-semibold" dir="ltr">
                                     {formatNumber(data, year)}
                                 </span>
@@ -39,7 +41,14 @@ export default function Numbering({ numbering, year }) {
                             <div className="grid gap-5 sm:grid-cols-3">
                                 <Field label={t('settings.numbering.prefix')} error={error(type, 'prefix')}>
                                     {(id) => (
-                                        <TextInput id={id} dir="ltr" maxLength={10} value={data.prefix} onChange={(e) => set(type, 'prefix', e.target.value)} error={error(type, 'prefix')} />
+                                        <TextInput
+                                            id={id}
+                                            dir="ltr"
+                                            maxLength={10}
+                                            value={data.prefix}
+                                            onChange={(e) => set(type, 'prefix', e.target.value)}
+                                            error={error(type, 'prefix')}
+                                        />
                                     )}
                                 </Field>
                                 <Field label={t('settings.numbering.padding')} error={error(type, 'padding')}>
@@ -53,7 +62,11 @@ export default function Numbering({ numbering, year }) {
                                         </Select>
                                     )}
                                 </Field>
-                                <Field label={t('settings.numbering.next_number')} hint={t('settings.numbering.next_number_hint')} error={error(type, 'next_number')}>
+                                <Field
+                                    label={t('settings.numbering.next_number')}
+                                    hint={t('settings.numbering.next_number_hint')}
+                                    error={error(type, 'next_number')}
+                                >
                                     {(id, describedBy) => (
                                         <TextInput
                                             id={id}
@@ -68,8 +81,16 @@ export default function Numbering({ numbering, year }) {
                                 </Field>
                             </div>
                             <div className="flex flex-wrap gap-x-8 gap-y-3">
-                                <Checkbox label={t('settings.numbering.include_year')} checked={data.include_year} onChange={(e) => set(type, 'include_year', e.target.checked)} />
-                                <Checkbox label={t('settings.numbering.yearly_reset')} checked={data.yearly_reset} onChange={(e) => set(type, 'yearly_reset', e.target.checked)} />
+                                <Checkbox
+                                    label={t('settings.numbering.include_year')}
+                                    checked={data.include_year}
+                                    onChange={(e) => set(type, 'include_year', e.target.checked)}
+                                />
+                                <Checkbox
+                                    label={t('settings.numbering.yearly_reset')}
+                                    checked={data.yearly_reset}
+                                    onChange={(e) => set(type, 'yearly_reset', e.target.checked)}
+                                />
                             </div>
                         </SettingsCard>
                     );

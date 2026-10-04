@@ -28,18 +28,18 @@ export function ListToolbar({ url, filters, placeholder, types, action }) {
     return (
         <div className="flex flex-wrap items-center gap-3">
             <div className="relative min-w-56 flex-1">
-                <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-ink-subtle" />
+                <Search className="text-ink-subtle pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2" />
                 <input
                     type="search"
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     placeholder={placeholder}
                     aria-label={placeholder}
-                    className="h-11 w-full rounded-xl border border-line-strong bg-card ps-9 pe-3 text-sm placeholder:text-ink-subtle focus:border-brand-500 focus:ring-3 focus:ring-brand-100 focus:outline-none"
+                    className="border-line-strong bg-card placeholder:text-ink-subtle focus:border-brand-500 focus:ring-brand-100 h-11 w-full rounded-xl border ps-9 pe-3 text-sm focus:ring-3 focus:outline-none"
                 />
             </div>
             {types && (
-                <div className="flex rounded-xl border border-line-strong bg-card p-1">
+                <div className="border-line-strong bg-card flex rounded-xl border p-1">
                     {types.map(({ value, label }) => (
                         <button
                             key={value ?? 'all'}

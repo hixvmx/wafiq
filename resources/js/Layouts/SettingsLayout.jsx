@@ -32,7 +32,7 @@ export default function SettingsLayout({ children }) {
                             aria-current={current === key ? 'page' : undefined}
                             className={cn(
                                 'flex shrink-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium whitespace-nowrap transition-colors',
-                                current === key ? 'bg-card text-brand-700 shadow-card ring-1 ring-line' : 'text-ink-muted hover:bg-card hover:text-ink',
+                                current === key ? 'bg-card text-brand-700 shadow-card ring-line ring-1' : 'text-ink-muted hover:bg-card hover:text-ink',
                             )}
                         >
                             <Icon className="size-4.5" />
@@ -51,17 +51,17 @@ SettingsLayout.propTypes = { children: PropTypes.node };
 /** A titled card holding one settings form. */
 export function SettingsCard({ title, intro, children, footer }) {
     return (
-        <section className="rounded-card border border-line bg-card shadow-card">
+        <section className="rounded-card border-line bg-card shadow-card border">
             <div className="space-y-5 p-5 sm:p-6">
                 {(title || intro) && (
                     <header>
-                        {title && <h2 className="text-base font-bold text-ink">{title}</h2>}
-                        {intro && <p className="mt-1 text-sm text-ink-muted">{intro}</p>}
+                        {title && <h2 className="text-ink text-base font-bold">{title}</h2>}
+                        {intro && <p className="text-ink-muted mt-1 text-sm">{intro}</p>}
                     </header>
                 )}
                 {children}
             </div>
-            {footer && <div className="flex justify-end gap-2 border-t border-line px-5 py-4 sm:px-6">{footer}</div>}
+            {footer && <div className="border-line flex justify-end gap-2 border-t px-5 py-4 sm:px-6">{footer}</div>}
         </section>
     );
 }

@@ -11,7 +11,17 @@ let nextKey = 1;
 
 /** A blank line; `key` only lives in the browser (React list key). */
 export function newLine(defaultTaxId) {
-    return { key: `new-${nextKey++}`, item_id: null, name: '', description: '', qty: '1', unit: '', unit_price: '', discount: '', tax_rate_id: defaultTaxId ?? null };
+    return {
+        key: `new-${nextKey++}`,
+        item_id: null,
+        name: '',
+        description: '',
+        qty: '1',
+        unit: '',
+        unit_price: '',
+        discount: '',
+        tax_rate_id: defaultTaxId ?? null,
+    };
 }
 
 /** Gives lines loaded from the server a browser key. */
@@ -55,7 +65,7 @@ export function LineItemsEditor({ lines, onChange, taxRates, units, currency, de
     return (
         <div className="space-y-3">
             {/* Column titles (desktop) */}
-            <div className="hidden grid-cols-[2rem_minmax(0,1fr)_5.5rem_6rem_7.5rem_5rem_9rem_8rem_2.5rem] gap-2 px-1 text-xs font-medium text-ink-subtle lg:grid">
+            <div className="text-ink-subtle hidden grid-cols-[2rem_minmax(0,1fr)_5.5rem_6rem_7.5rem_5rem_9rem_8rem_2.5rem] gap-2 px-1 text-xs font-medium lg:grid">
                 <span />
                 <span>{t('documents.form.item')}</span>
                 <span>{t('documents.form.qty')}</span>
@@ -122,14 +132,26 @@ function LineRow({ line, index, count, taxRates, currency, amount, error, onUpda
     });
 
     return (
-        <div className="rounded-xl border border-line p-3 lg:border-0 lg:p-0">
+        <div className="border-line rounded-xl border p-3 lg:border-0 lg:p-0">
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-[2rem_minmax(0,1fr)_5.5rem_6rem_7.5rem_5rem_9rem_8rem_2.5rem] lg:items-start">
                 {/* Move up / down */}
                 <div className="order-last col-span-2 flex gap-1 lg:order-none lg:col-span-1 lg:flex-col lg:gap-0 lg:pt-0.5">
-                    <button type="button" onClick={() => onMove(-1)} disabled={index === 0} className="rounded p-1 text-ink-subtle hover:text-ink disabled:opacity-30" aria-label={t('documents.form.move_up')}>
+                    <button
+                        type="button"
+                        onClick={() => onMove(-1)}
+                        disabled={index === 0}
+                        className="text-ink-subtle hover:text-ink rounded p-1 disabled:opacity-30"
+                        aria-label={t('documents.form.move_up')}
+                    >
                         <ArrowUp className="size-3.5" />
                     </button>
-                    <button type="button" onClick={() => onMove(1)} disabled={index === count - 1} className="rounded p-1 text-ink-subtle hover:text-ink disabled:opacity-30" aria-label={t('documents.form.move_down')}>
+                    <button
+                        type="button"
+                        onClick={() => onMove(1)}
+                        disabled={index === count - 1}
+                        className="text-ink-subtle hover:text-ink rounded p-1 disabled:opacity-30"
+                        aria-label={t('documents.form.move_down')}
+                    >
                         <ArrowDown className="size-3.5" />
                     </button>
                 </div>
@@ -148,7 +170,7 @@ function LineRow({ line, index, count, taxRates, currency, amount, error, onUpda
                                 aria-label={t('documents.form.item')}
                                 renderOption={(item) => (
                                     <div className="flex items-center justify-between gap-3">
-                                        <span className="truncate text-ink">{item.name}</span>
+                                        <span className="text-ink truncate">{item.name}</span>
                                         <span className={cn('shrink-0 text-xs', item.currency === currency ? 'text-ink-subtle' : 'text-warning')} dir="ltr">
                                             {item.price} {item.currency}
                                         </span>
@@ -159,7 +181,7 @@ function LineRow({ line, index, count, taxRates, currency, amount, error, onUpda
                         <button
                             type="button"
                             onClick={() => setShowDescription((v) => !v)}
-                            className={cn('rounded-lg px-2 text-ink-subtle hover:bg-surface hover:text-ink', showDescription && 'text-brand-700')}
+                            className={cn('text-ink-subtle hover:bg-surface hover:text-ink rounded-lg px-2', showDescription && 'text-brand-700')}
                             aria-label={t('documents.form.description')}
                             title={t('documents.form.description')}
                         >
@@ -172,7 +194,7 @@ function LineRow({ line, index, count, taxRates, currency, amount, error, onUpda
                             onChange={(e) => onUpdate({ description: e.target.value })}
                             placeholder={t('documents.form.description')}
                             rows={2}
-                            className="block w-full rounded-lg border border-line-strong bg-card px-2.5 py-2 text-sm focus:border-brand-500 focus:ring-3 focus:ring-brand-100 focus:outline-none"
+                            className="border-line-strong bg-card focus:border-brand-500 focus:ring-brand-100 block w-full rounded-lg border px-2.5 py-2 text-sm focus:ring-3 focus:outline-none"
                         />
                     )}
                 </div>
@@ -205,19 +227,26 @@ function LineRow({ line, index, count, taxRates, currency, amount, error, onUpda
                     </select>
                 </Labeled>
 
-                <p className="col-span-2 flex h-10 items-center justify-end text-sm font-semibold text-ink lg:col-span-1" dir="ltr">
+                <p className="text-ink col-span-2 flex h-10 items-center justify-end text-sm font-semibold lg:col-span-1" dir="ltr">
                     {amount}
                 </p>
 
                 <div className="order-last flex justify-end lg:order-none">
-                    <Button variant="ghost" size="sm" onClick={onRemove} disabled={count === 1} aria-label={t('documents.form.remove_line')} title={t('documents.form.remove_line')}>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onRemove}
+                        disabled={count === 1}
+                        aria-label={t('documents.form.remove_line')}
+                        title={t('documents.form.remove_line')}
+                    >
                         <Trash2 className="size-4" />
                     </Button>
                 </div>
             </div>
 
             {['name', 'qty', 'unit_price', 'discount'].some((name) => error(name)) && (
-                <p className="mt-1.5 text-xs font-medium text-danger lg:ps-10" role="alert">
+                <p className="text-danger mt-1.5 text-xs font-medium lg:ps-10" role="alert">
                     {['name', 'qty', 'unit_price', 'discount'].map((name) => error(name)).filter(Boolean)[0]}
                 </p>
             )}
@@ -243,7 +272,7 @@ LineRow.propTypes = {
 function Labeled({ label, className, children }) {
     return (
         <label className={cn('block', className)}>
-            <span className="mb-1 block text-xs text-ink-subtle lg:hidden">{label}</span>
+            <span className="text-ink-subtle mb-1 block text-xs lg:hidden">{label}</span>
             {children}
         </label>
     );

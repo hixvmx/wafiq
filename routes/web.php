@@ -4,7 +4,9 @@ use App\Http\Controllers\Auth\AcceptInvitationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentShareController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CompanyProfileController;
 use App\Http\Controllers\Settings\DocumentDefaultsController;
@@ -32,6 +34,17 @@ Route::controller(AcceptInvitationController::class)->group(function () {
     Route::post('invitations/{token}', 'accept')->middleware('throttle:10,1')->name('invitations.accept');
 });
 
+/*
+| The client's page behind a tracked link (no login).
+*/
+Route::prefix('d/{token}')->name('public.')->controller(PublicDocumentController::class)->group(function () {
+    Route::get('/', 'show')->name('document');
+    Route::post('view', 'view')->middleware('throttle:60,1')->name('view');
+    Route::post('approve', 'approve')->middleware('throttle:10,1')->name('approve');
+    Route::post('reject', 'reject')->middleware('throttle:10,1')->name('reject');
+    Route::post('latest', 'latest')->middleware('throttle:10,1')->name('latest');
+});
+
 // Logo is public; stamp and signature are checked inside.
 Route::get('branding/{company}/{kind}', [BrandingController::class, 'show'])->name('branding.show');
 
@@ -55,6 +68,10 @@ Route::middleware(['auth', 'member'])->group(function () {
             Route::post('{document}/duplicate', 'duplicate')->name('duplicate')->defaults('type', $type);
             Route::post('{document}/revise', 'revise')->name('revise')->defaults('type', $type);
             Route::post('{document}/convert', 'convert')->name('convert')->defaults('type', $type);
+        });
+        Route::prefix($prefix)->name("{$prefix}.")->controller(DocumentShareController::class)->group(function () use ($type) {
+            Route::post('{document}/send', 'store')->name('send')->defaults('type', $type);
+            Route::post('{document}/extend', 'extend')->name('extend')->defaults('type', $type);
         });
     }
 

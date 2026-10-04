@@ -25,19 +25,19 @@ export function Field({ label, hint, error, optional, optionalLabel, className, 
     return (
         <div className={cn('space-y-1.5', className)}>
             {label && (
-                <label htmlFor={id} className="block text-sm font-medium text-ink">
+                <label htmlFor={id} className="text-ink block text-sm font-medium">
                     {label}
-                    {optional && <span className="ms-1.5 text-xs font-normal text-ink-subtle">({optionalLabel})</span>}
+                    {optional && <span className="text-ink-subtle ms-1.5 text-xs font-normal">({optionalLabel})</span>}
                 </label>
             )}
             {children(id, describedBy)}
             {hint && !error && (
-                <p id={hintId} className="text-xs text-ink-subtle">
+                <p id={hintId} className="text-ink-subtle text-xs">
                     {hint}
                 </p>
             )}
             {error && (
-                <p id={errorId} className="text-xs font-medium text-danger" role="alert">
+                <p id={errorId} className="text-danger text-xs font-medium" role="alert">
                     {error}
                 </p>
             )}
@@ -82,10 +82,10 @@ Select.propTypes = { ...controlProps, children: PropTypes.node };
 export function Checkbox({ label, hint, ...props }) {
     return (
         <label className="flex cursor-pointer items-start gap-3">
-            <input type="checkbox" className="mt-0.5 size-4.5 rounded border-line-strong accent-brand-600" {...props} />
+            <input type="checkbox" className="border-line-strong accent-brand-600 mt-0.5 size-4.5 rounded" {...props} />
             <span>
-                <span className="block text-sm font-medium text-ink">{label}</span>
-                {hint && <span className="block text-xs text-ink-subtle">{hint}</span>}
+                <span className="text-ink block text-sm font-medium">{label}</span>
+                {hint && <span className="text-ink-subtle block text-xs">{hint}</span>}
             </span>
         </label>
     );

@@ -31,12 +31,12 @@ export function Toaster() {
                     key={toast.id}
                     role="status"
                     className={cn(
-                        'pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border bg-card p-4 text-sm shadow-lg',
+                        'bg-card pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border p-4 text-sm shadow-lg',
                         toast.type === 'success' ? 'border-green-200' : 'border-red-200',
                     )}
                 >
-                    {toast.type === 'success' ? <CheckCircle2 className="size-5 shrink-0 text-success" /> : <XCircle className="size-5 shrink-0 text-danger" />}
-                    <p className="flex-1 text-ink">{toast.message}</p>
+                    {toast.type === 'success' ? <CheckCircle2 className="text-success size-5 shrink-0" /> : <XCircle className="text-danger size-5 shrink-0" />}
+                    <p className="text-ink flex-1">{toast.message}</p>
                     <button
                         type="button"
                         onClick={() => setToasts((current) => current.filter((item) => item.id !== toast.id))}

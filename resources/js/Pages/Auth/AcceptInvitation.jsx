@@ -12,7 +12,7 @@ export default function AcceptInvitation({ token, invitation }) {
     if (!invitation) {
         return (
             <AuthLayout title={t('invitations.invalid_title')}>
-                <p className="text-sm leading-relaxed text-ink-muted">{t('invitations.invalid_text')}</p>
+                <p className="text-ink-muted text-sm leading-relaxed">{t('invitations.invalid_text')}</p>
             </AuthLayout>
         );
     }

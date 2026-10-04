@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Actions\CopyDocument;
 use App\Actions\SaveDocument;
+use App\Actions\ShareDocument;
 use App\Enums\DocumentStatus;
 use App\Models\Client;
 use App\Models\Document;
+use App\Models\DocumentSend;
 use App\Models\TaxRate;
 use App\Services\CurrentCompany;
+use App\Services\DocumentWorkflow;
 use App\Support\Digits;
 use App\Support\DocumentPresenter;
 use App\Support\Money;
@@ -95,11 +98,35 @@ class DocumentController extends Controller
         $this->ensureType($document, $type);
         $this->authorize('view', $document);
 
-        $document->load('lines', 'client', 'creator', 'company', 'quote', 'invoice');
+        app(DocumentWorkflow::class)->expireIfDue($document);
+        $document->load('lines', 'client', 'creator', 'company', 'quote', 'invoice', 'sends.sender');
         $user = $request->user();
+        $canSend = $user->can('send', $document);
 
         return Inertia::render('Documents/Show', [
-            'document' => DocumentPresenter::full($document),
+            'document' => [
+                ...DocumentPresenter::full($document),
+                'approved_at' => $document->approved_at?->toIso8601String(),
+                'approved_by_name' => $document->approved_by_name,
+                'approved_ip' => $document->approved_ip,
+                'rejected_at' => $document->rejected_at?->toIso8601String(),
+                'rejection_reason' => $document->rejection_reason,
+                'expired_at' => $document->expired_at?->toIso8601String(),
+                'is_replaced' => ! $document->isDraft() && app(DocumentWorkflow::class)->isReplaced($document),
+            ],
+            // Tracking timeline: one row per tracked link.
+            'sends' => $document->sends->map(fn (DocumentSend $send) => [
+                'id' => $send->id,
+                'channel' => $send->channel,
+                'recipient' => $send->recipient,
+                'sent_by' => $send->sender?->name,
+                'sent_at' => $send->sent_at->toIso8601String(),
+                'email_status' => $send->email_status,
+                'views_count' => $send->views_count,
+                'first_viewed_at' => $send->first_viewed_at?->toIso8601String(),
+                'last_viewed_at' => $send->last_viewed_at?->toIso8601String(),
+            ]),
+            'sendDefaults' => $canSend ? app(ShareDocument::class)->defaults($document) : null,
             'revisions' => $document->revisions()->get()->map(fn (Document $revision) => [
                 'id' => $revision->id,
                 'number' => $revision->displayNumber(),
@@ -114,6 +141,8 @@ class DocumentController extends Controller
                 'duplicate' => $user->can('duplicate', $document),
                 'convert' => $user->can('convert', $document),
                 'delete' => $user->can('delete', $document),
+                'send' => $canSend,
+                'extend' => $user->can('extend', $document),
             ],
         ]);
     }

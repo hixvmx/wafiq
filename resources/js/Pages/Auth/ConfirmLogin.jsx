@@ -13,7 +13,7 @@ export default function ConfirmLogin({ token, valid }) {
     if (!valid) {
         return (
             <AuthLayout title={t('auth.invalid_title')}>
-                <p className="text-sm leading-relaxed text-ink-muted">{t('auth.invalid_text')}</p>
+                <p className="text-ink-muted text-sm leading-relaxed">{t('auth.invalid_text')}</p>
                 <ButtonLink href="/login" className="mt-6 w-full">
                     {t('auth.request_new')}
                 </ButtonLink>

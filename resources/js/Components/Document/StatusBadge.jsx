@@ -18,7 +18,13 @@ export function StatusBadge({ status, className }) {
     const [style, Icon] = STYLES[status] ?? STYLES.draft;
 
     return (
-        <span className={cn('inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ring-1 ring-inset', style, className)}>
+        <span
+            className={cn(
+                'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium whitespace-nowrap ring-1 ring-inset',
+                style,
+                className,
+            )}
+        >
             <Icon className="size-3.5" />
             {t(`statuses.${status}`)}
         </span>

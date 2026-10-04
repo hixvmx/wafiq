@@ -21,16 +21,16 @@ export function ConfirmDialog({ open, title, message, confirmLabel, processing, 
             ref={ref}
             onClose={onClose}
             onClick={(e) => e.target === ref.current && onClose()}
-            className="m-auto w-[calc(100%-2rem)] max-w-md rounded-card bg-card p-0 shadow-2xl backdrop:bg-ink/50"
+            className="rounded-card bg-card backdrop:bg-ink/50 m-auto w-[calc(100%-2rem)] max-w-md p-0 shadow-2xl"
         >
             <div className="p-6">
                 <div className="flex items-start gap-4">
-                    <div className="rounded-full bg-red-50 p-2.5 text-danger">
+                    <div className="text-danger rounded-full bg-red-50 p-2.5">
                         <AlertTriangle className="size-5" />
                     </div>
                     <div>
-                        <h2 className="text-base font-bold text-ink">{title}</h2>
-                        <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">{message}</p>
+                        <h2 className="text-ink text-base font-bold">{title}</h2>
+                        <p className="text-ink-muted mt-1.5 text-sm leading-relaxed">{message}</p>
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end gap-2">

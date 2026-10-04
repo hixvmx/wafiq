@@ -29,12 +29,15 @@ export function Pagination({ meta }) {
                             href={link.url}
                             preserveScroll={false}
                             aria-current={link.active ? 'page' : undefined}
-                            className={cn(itemClass, link.active ? 'border-brand-600 bg-brand-600 text-white' : 'border-line bg-card text-ink hover:bg-surface')}
+                            className={cn(
+                                itemClass,
+                                link.active ? 'border-brand-600 bg-brand-600 text-white' : 'border-line bg-card text-ink hover:bg-surface',
+                            )}
                         >
                             {link.label}
                         </Link>
                     ) : (
-                        <span key={i} className="px-1 text-ink-subtle">
+                        <span key={i} className="text-ink-subtle px-1">
                             …
                         </span>
                     ),
@@ -44,7 +47,7 @@ export function Pagination({ meta }) {
                 </PageLink>
             </div>
             {meta.from !== null && (
-                <p className="text-xs text-ink-subtle">{t('pagination.showing', { from: meta.from, to: meta.to ?? meta.from, total: meta.total })}</p>
+                <p className="text-ink-subtle text-xs">{t('pagination.showing', { from: meta.from, to: meta.to ?? meta.from, total: meta.total })}</p>
             )}
         </nav>
     );
@@ -63,7 +66,7 @@ Pagination.propTypes = {
 function PageLink({ url, className, label, children }) {
     if (!url) {
         return (
-            <span className={cn(className, 'cursor-not-allowed border-line bg-card text-ink-subtle opacity-50')} aria-label={label}>
+            <span className={cn(className, 'border-line bg-card text-ink-subtle cursor-not-allowed opacity-50')} aria-label={label}>
                 {children}
             </span>
         );

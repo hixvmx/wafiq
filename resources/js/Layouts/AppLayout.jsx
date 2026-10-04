@@ -43,7 +43,7 @@ export default function AppLayout({ title, actions, children }) {
             <Head title={title} />
             <div className="min-h-screen lg:flex">
                 {/* Desktop sidebar */}
-                <aside className="hidden w-64 shrink-0 flex-col border-e border-line bg-card lg:flex">
+                <aside className="border-line bg-card hidden w-64 shrink-0 flex-col border-e lg:flex">
                     <Brand name={company?.name} />
                     {sidebar}
                     {auth.user && <UserBox user={auth.user} />}
@@ -52,11 +52,16 @@ export default function AppLayout({ title, actions, children }) {
                 {/* Phone menu */}
                 {menuOpen && (
                     <div className="fixed inset-0 z-40 lg:hidden">
-                        <button type="button" className="absolute inset-0 bg-ink/40" onClick={() => setMenuOpen(false)} aria-label={t('common.close')} />
-                        <aside className="absolute inset-y-0 start-0 flex w-72 max-w-[85%] flex-col bg-card shadow-xl">
+                        <button type="button" className="bg-ink/40 absolute inset-0" onClick={() => setMenuOpen(false)} aria-label={t('common.close')} />
+                        <aside className="bg-card absolute inset-y-0 start-0 flex w-72 max-w-[85%] flex-col shadow-xl">
                             <div className="flex items-center justify-between pe-3">
                                 <Brand name={company?.name} />
-                                <button type="button" onClick={() => setMenuOpen(false)} className="rounded-lg p-2 text-ink-muted hover:bg-surface" aria-label={t('common.close')}>
+                                <button
+                                    type="button"
+                                    onClick={() => setMenuOpen(false)}
+                                    className="text-ink-muted hover:bg-surface rounded-lg p-2"
+                                    aria-label={t('common.close')}
+                                >
                                     <X className="size-5" />
                                 </button>
                             </div>
@@ -67,11 +72,16 @@ export default function AppLayout({ title, actions, children }) {
                 )}
 
                 <div className="flex min-w-0 flex-1 flex-col">
-                    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-line bg-card/90 px-4 backdrop-blur sm:px-6">
-                        <button type="button" onClick={() => setMenuOpen(true)} className="rounded-lg p-2 text-ink-muted hover:bg-surface lg:hidden" aria-label={t('nav.menu')}>
+                    <header className="border-line bg-card/90 sticky top-0 z-30 flex h-16 items-center gap-3 border-b px-4 backdrop-blur sm:px-6">
+                        <button
+                            type="button"
+                            onClick={() => setMenuOpen(true)}
+                            className="text-ink-muted hover:bg-surface rounded-lg p-2 lg:hidden"
+                            aria-label={t('nav.menu')}
+                        >
                             <Menu className="size-5" />
                         </button>
-                        <h1 className="min-w-0 flex-1 truncate text-lg font-bold text-ink">{title}</h1>
+                        <h1 className="text-ink min-w-0 flex-1 truncate text-lg font-bold">{title}</h1>
                         {actions}
                     </header>
                     <main className="flex-1 p-4 sm:p-6">{children}</main>
@@ -86,8 +96,8 @@ AppLayout.propTypes = { title: PropTypes.string.isRequired, actions: PropTypes.n
 
 function Brand({ name }) {
     return (
-        <Link href="/" className="flex h-16 items-center gap-2 px-5 text-lg font-bold text-ink">
-            <span className="inline-flex size-8 items-center justify-center rounded-lg bg-brand-600 text-white">و</span>
+        <Link href="/" className="text-ink flex h-16 items-center gap-2 px-5 text-lg font-bold">
+            <span className="bg-brand-600 inline-flex size-8 items-center justify-center rounded-lg text-white">و</span>
             <span className="truncate">{name ?? 'وافِق'}</span>
         </Link>
     );
@@ -121,11 +131,11 @@ function UserBox({ user }) {
     const t = useT();
 
     return (
-        <div className="flex items-center gap-3 border-t border-line p-4">
+        <div className="border-line flex items-center gap-3 border-t p-4">
             <Avatar src={user.avatar} name={user.name} size={36} />
             <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-ink">{user.name}</p>
-                <p className="truncate text-xs text-ink-subtle" dir="ltr">
+                <p className="text-ink truncate text-sm font-semibold">{user.name}</p>
+                <p className="text-ink-subtle truncate text-xs" dir="ltr">
                     {user.email}
                 </p>
             </div>
@@ -133,7 +143,7 @@ function UserBox({ user }) {
                 href="/logout"
                 method="post"
                 as="button"
-                className="rounded-lg p-2 text-ink-subtle hover:bg-surface hover:text-ink"
+                className="text-ink-subtle hover:bg-surface hover:text-ink rounded-lg p-2"
                 aria-label={t('nav.logout')}
                 title={t('nav.logout')}
             >

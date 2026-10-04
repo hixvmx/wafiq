@@ -11,12 +11,19 @@ export function DocumentPaper({ document }) {
     const t = useT();
     const { company, client } = document;
     const isInvoice = document.type === 'invoice';
-    const title = isInvoice ? (company.vat_number ? t('documents.paper.tax_invoice_title') : t('documents.paper.invoice_title')) : t('documents.paper.quote_title');
+    const title = isInvoice
+        ? company.vat_number
+            ? t('documents.paper.tax_invoice_title')
+            : t('documents.paper.invoice_title')
+        : t('documents.paper.quote_title');
     const hasLineDiscount = document.lines.some((line) => Number(line.discount_percent) > 0);
     const hasTax = document.lines.some((line) => Number(line.tax_rate) > 0);
 
     return (
-        <article className="overflow-hidden rounded-card border border-line bg-white text-ink shadow-card print:rounded-none print:border-0 print:shadow-none" style={{ '--paper-brand': company.brand_color }}>
+        <article
+            className="rounded-card border-line text-ink shadow-card overflow-hidden border bg-white print:rounded-none print:border-0 print:shadow-none"
+            style={{ '--paper-brand': company.brand_color }}
+        >
             <div className="h-1.5 bg-(--paper-brand)" />
             <div className="space-y-8 p-6 sm:p-10">
                 {/* Letterhead */}
@@ -24,13 +31,13 @@ export function DocumentPaper({ document }) {
                     <div className="space-y-1">
                         {company.logo_url ? <img src={company.logo_url} alt={company.name} className="mb-2 h-14 w-auto max-w-48 object-contain" /> : null}
                         <p className="text-lg font-bold">{company.legal_name || company.name}</p>
-                        {company.address && <p className="text-sm whitespace-pre-line text-ink-muted">{company.address}</p>}
-                        <p className="space-x-3 text-xs text-ink-muted rtl:space-x-reverse">
+                        {company.address && <p className="text-ink-muted text-sm whitespace-pre-line">{company.address}</p>}
+                        <p className="text-ink-muted space-x-3 text-xs rtl:space-x-reverse">
                             {company.vat_number && <span>{t('documents.paper.vat', { number: company.vat_number })}</span>}
                             {company.cr_number && <span>{t('documents.paper.cr', { number: company.cr_number })}</span>}
                         </p>
                         {(company.phone || company.email) && (
-                            <p className="text-xs text-ink-muted" dir="ltr">
+                            <p className="text-ink-muted text-xs" dir="ltr">
                                 {[company.phone, company.email].filter(Boolean).join(' · ')}
                             </p>
                         )}
@@ -50,12 +57,12 @@ export function DocumentPaper({ document }) {
 
                 {/* Client */}
                 {client && (
-                    <section className="rounded-xl bg-surface p-4">
-                        <p className="text-xs font-medium text-ink-subtle">{t('documents.paper.to')}</p>
+                    <section className="bg-surface rounded-xl p-4">
+                        <p className="text-ink-subtle text-xs font-medium">{t('documents.paper.to')}</p>
                         <p className="mt-1 font-semibold">{client.name}</p>
-                        {client.contact_name && <p className="text-sm text-ink-muted">{client.contact_name}</p>}
-                        {client.address && <p className="text-sm whitespace-pre-line text-ink-muted">{client.address}</p>}
-                        <p className="space-x-3 text-xs text-ink-muted rtl:space-x-reverse">
+                        {client.contact_name && <p className="text-ink-muted text-sm">{client.contact_name}</p>}
+                        {client.address && <p className="text-ink-muted text-sm whitespace-pre-line">{client.address}</p>}
+                        <p className="text-ink-muted space-x-3 text-xs rtl:space-x-reverse">
                             {client.vat_number && <span>{t('documents.paper.vat', { number: client.vat_number })}</span>}
                             {client.cr_number && <span>{t('documents.paper.cr', { number: client.cr_number })}</span>}
                         </p>
@@ -66,7 +73,7 @@ export function DocumentPaper({ document }) {
                 <div className="-mx-6 overflow-x-auto px-6 sm:mx-0 sm:px-0">
                     <table className="w-full min-w-xl text-sm">
                         <thead>
-                            <tr className="border-b-2 border-(--paper-brand) text-xs text-ink-muted">
+                            <tr className="text-ink-muted border-b-2 border-(--paper-brand) text-xs">
                                 <th className="py-2 pe-2 text-start font-medium">{t('documents.paper.col_number')}</th>
                                 <th className="py-2 pe-2 text-start font-medium">{t('documents.paper.col_item')}</th>
                                 <th className="px-2 py-2 text-end font-medium">{t('documents.paper.col_qty')}</th>
@@ -78,11 +85,11 @@ export function DocumentPaper({ document }) {
                         </thead>
                         <tbody>
                             {document.lines.map((line, i) => (
-                                <tr key={line.id} className="border-b border-line align-top">
-                                    <td className="py-3 pe-2 text-ink-subtle">{i + 1}</td>
+                                <tr key={line.id} className="border-line border-b align-top">
+                                    <td className="text-ink-subtle py-3 pe-2">{i + 1}</td>
                                     <td className="py-3 pe-2">
                                         <p className="font-medium">{line.name}</p>
-                                        {line.description && <p className="mt-0.5 text-xs whitespace-pre-line text-ink-muted">{line.description}</p>}
+                                        {line.description && <p className="text-ink-muted mt-0.5 text-xs whitespace-pre-line">{line.description}</p>}
                                     </td>
                                     <td className="px-2 py-3 text-end whitespace-nowrap">
                                         <span dir="ltr">{line.qty}</span> {line.unit}
@@ -112,7 +119,7 @@ export function DocumentPaper({ document }) {
                 {/* Totals + amount in words */}
                 <div className="grid gap-6 sm:grid-cols-[minmax(0,1fr)_20rem]">
                     <div className="order-2 sm:order-1">
-                        <p className="text-xs font-medium text-ink-subtle">{t('documents.paper.amount_in_words')}</p>
+                        <p className="text-ink-subtle text-xs font-medium">{t('documents.paper.amount_in_words')}</p>
                         <p className="mt-1 text-sm leading-relaxed font-medium">{document.amount_in_words}</p>
                     </div>
                     <div className="order-1 sm:order-2">
@@ -129,7 +136,7 @@ export function DocumentPaper({ document }) {
                 </div>
 
                 {(document.notes || document.terms || (isInvoice && company.bank_details)) && (
-                    <div className="grid gap-6 border-t border-line pt-6 sm:grid-cols-2">
+                    <div className="border-line grid gap-6 border-t pt-6 sm:grid-cols-2">
                         {document.notes && <TextBlock title={t('documents.paper.notes')} text={document.notes} />}
                         {document.terms && <TextBlock title={t('documents.paper.terms')} text={document.terms} />}
                         {isInvoice && company.bank_details && <TextBlock title={t('documents.paper.bank_details')} text={company.bank_details} />}
@@ -184,7 +191,7 @@ DateRow.propTypes = { label: PropTypes.string.isRequired, value: PropTypes.strin
 function TextBlock({ title, text }) {
     return (
         <div>
-            <p className="text-xs font-medium text-ink-subtle">{title}</p>
+            <p className="text-ink-subtle text-xs font-medium">{title}</p>
             <p className="mt-1 text-sm leading-relaxed whitespace-pre-line">{text}</p>
         </div>
     );

@@ -10,9 +10,9 @@ export default function Welcome() {
     return (
         <AppLayout title={t('nav.dashboard')}>
             <Card className="mx-auto mt-10 max-w-md p-8 text-center">
-                <CheckCircle2 className="mx-auto size-12 text-brand-600" />
+                <CheckCircle2 className="text-brand-600 mx-auto size-12" />
                 <h2 className="mt-4 text-2xl font-bold">وافِق</h2>
-                <p className="mt-2 text-ink-muted">{t('app.tagline')}</p>
+                <p className="text-ink-muted mt-2">{t('app.tagline')}</p>
             </Card>
         </AppLayout>
     );

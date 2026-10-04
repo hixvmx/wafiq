@@ -49,6 +49,16 @@ final class Money
             : $sign.substr($digits, 0, -$decimals).'.'.substr($digits, -$decimals);
     }
 
+    /** 1250050 SAR → "12,500.50 SAR" (for messages and emails). */
+    public static function format(int $minor, string $currency): string
+    {
+        [$whole, $fraction] = array_pad(explode('.', self::fromMinor($minor, $currency)), 2, null);
+        $sign = str_starts_with($whole, '-') ? '-' : '';
+        $whole = ltrim($whole, '-');
+
+        return $sign.strrev(implode(',', str_split(strrev($whole), 3))).($fraction !== null ? ".{$fraction}" : '')." {$currency}";
+    }
+
     /** Validation regex for an amount typed in a form, for a given currency. */
     public static function pattern(string $currency): string
     {

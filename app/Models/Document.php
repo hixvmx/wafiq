@@ -82,6 +82,12 @@ class Document extends Model
         return $this->hasMany(self::class, 'root_id', 'root_id')->orderBy('revision');
     }
 
+    /** @return HasMany<DocumentSend, $this> */
+    public function sends(): HasMany
+    {
+        return $this->hasMany(DocumentSend::class)->latest('sent_at');
+    }
+
     /** @param Builder<self> $query */
     public function scopeLatestRevisions(Builder $query): void
     {

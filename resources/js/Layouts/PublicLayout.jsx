@@ -12,12 +12,12 @@ export default function PublicLayout({ title, brand, children }) {
                 <meta name="robots" content="noindex, nofollow" />
             </Head>
             <div className="min-h-screen" style={brand?.color ? { '--color-brand-600': brand.color } : undefined}>
-                <header className="border-b border-line bg-card">
+                <header className="border-line bg-card border-b">
                     <div className="container-page flex h-16 items-center gap-3">
                         {brand?.logo_url ? (
                             <img src={brand.logo_url} alt={brand.name} className="h-10 w-auto max-w-40 object-contain" />
                         ) : (
-                            <span className="text-lg font-bold text-ink">{brand?.name}</span>
+                            <span className="text-ink text-lg font-bold">{brand?.name}</span>
                         )}
                     </div>
                 </header>

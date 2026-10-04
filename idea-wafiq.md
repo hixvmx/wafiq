@@ -380,15 +380,15 @@ wafiq/
 - [x] Lists with status filters, search, "not viewed after X days" filter
 
 ### Phase 5 — Sharing & tracking ⭐ (the core of Wafiq)
-- [ ] `document_sends`: one tracked link per send (channel + recipient + hashed token)
-- [ ] **Send dialog**: Email (message editor + PDF option) / WhatsApp (prefilled `wa.me` message, opens app or WhatsApp Web) / Copy link
-- [ ] Public client page (responsive, branded, PDF download, expired / replaced states)
-- [ ] **View tracking** with the JS "visible 2s" beacon, bot / crawler filter, team-member exclusion; `first_viewed_at`, `views_count`, per-send stats
-- [ ] Open Graph preview (logo, title, amount; no private details)
-- [ ] **Approve** (typed name + terms checkbox) / **Reject** (reason), with rate limit + double-submit protection; confirmation email to the client
-- [ ] Status machine (Draft → Sent → Viewed → Approved / Rejected / Expired) in one tested class
-- [ ] Scheduler: expire documents, "expiring in 2 days", "not viewed after 3 days", optional client reminders
-- [ ] Live status on the document page (polling) + tracking timeline
+- [x] `document_sends`: one tracked link per send (channel + recipient + hashed token)
+- [x] **Send dialog**: Email (message editor; PDF attachment comes with Phase 7) / WhatsApp (prefilled `wa.me` message, opens app or WhatsApp Web) / Copy link
+- [x] Public client page (responsive, branded, expired / replaced states; PDF download comes with Phase 7)
+- [x] **View tracking** with the JS "visible 2s" beacon, bot / crawler filter, team-member exclusion; `first_viewed_at`, `views_count`, per-send stats
+- [x] Open Graph preview (logo, title, amount; no private details)
+- [x] **Approve** (typed name + terms checkbox) / **Reject** (reason), with rate limit + double-submit protection *(confirmation email to the client: hidden in the section 16 checklist)*
+- [x] Status machine (Draft → Sent → Viewed → Approved / Rejected / Expired) in one tested class
+- [x] Scheduler: expire documents (hourly; the client page also expires on the spot) *("expiring in 2 days", "not viewed after 3 days", client reminders: hidden in the section 16 checklist)*
+- [x] Tracking timeline on the document page *(live status polling: hidden in the section 16 checklist)*
 
 ### Phase 6 — Payments (invoices)
 - [ ] Record payments (partial / full, method, reference), payment status, overdue detection + reminders

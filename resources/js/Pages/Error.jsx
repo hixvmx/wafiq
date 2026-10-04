@@ -22,10 +22,10 @@ export default function Error({ status }) {
             <Head title={`${t(`errors.${status}.title`, {}, title)}${app ? ` - ${app.name}` : ''}`} />
             <main className="flex min-h-screen items-center justify-center px-4 text-center">
                 <div className="max-w-md">
-                    <p className="text-7xl font-bold text-brand-600">{status}</p>
-                    <h1 className="mt-4 text-2xl font-bold text-ink">{t(`errors.${status}.title`, {}, title)}</h1>
-                    <p className="mt-2 text-ink-muted">{t(`errors.${status}.message`, {}, message)}</p>
-                    <Link href="/" className="mt-8 inline-flex h-11 items-center rounded-xl bg-brand-600 px-6 font-semibold text-white hover:bg-brand-700">
+                    <p className="text-brand-600 text-7xl font-bold">{status}</p>
+                    <h1 className="text-ink mt-4 text-2xl font-bold">{t(`errors.${status}.title`, {}, title)}</h1>
+                    <p className="text-ink-muted mt-2">{t(`errors.${status}.message`, {}, message)}</p>
+                    <Link href="/" className="bg-brand-600 hover:bg-brand-700 mt-8 inline-flex h-11 items-center rounded-xl px-6 font-semibold text-white">
                         {t('errors.back_home', {}, 'العودة إلى الرئيسية')}
                     </Link>
                 </div>

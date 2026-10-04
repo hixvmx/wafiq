@@ -94,13 +94,13 @@ export function Combobox({ value, onChange, onSelect, searchUrl, renderOption, p
                 }}
                 onKeyDown={onKeyDown}
                 className={cn(
-                    'block h-11 w-full rounded-xl border bg-card px-3.5 text-sm text-ink placeholder:text-ink-subtle focus:border-brand-500 focus:ring-3 focus:ring-brand-100 focus:outline-none',
+                    'bg-card text-ink placeholder:text-ink-subtle focus:border-brand-500 focus:ring-brand-100 block h-11 w-full rounded-xl border px-3.5 text-sm focus:ring-3 focus:outline-none',
                     error ? 'border-danger' : 'border-line-strong',
                     inputClassName,
                 )}
             />
             {showList && (
-                <div className="absolute inset-x-0 top-full z-30 mt-1 overflow-hidden rounded-xl border border-line bg-card shadow-lg">
+                <div className="border-line bg-card absolute inset-x-0 top-full z-30 mt-1 overflow-hidden rounded-xl border shadow-lg">
                     <ul id={listId} role="listbox" className="max-h-72 overflow-y-auto py-1">
                         {options.map((option, i) => (
                             <li
@@ -117,7 +117,7 @@ export function Combobox({ value, onChange, onSelect, searchUrl, renderOption, p
                         ))}
                     </ul>
                     {footer && (
-                        <div className="border-t border-line p-1" onMouseDown={(e) => e.preventDefault()}>
+                        <div className="border-line border-t p-1" onMouseDown={(e) => e.preventDefault()}>
                             {footer(() => setOpen(false))}
                         </div>
                     )}

@@ -37,9 +37,20 @@ export default function DocumentsIndex({ type, documents, filters, counts, canCr
             <div className="mx-auto max-w-5xl space-y-4">
                 {/* Status tabs */}
                 <div className="-mx-4 flex gap-1 overflow-x-auto px-4 pb-1">
-                    <Tab active={!filters.status && !filters.not_viewed} onClick={() => visit({ status: undefined, not_viewed: undefined })} label={t('documents.all')} count={total} />
+                    <Tab
+                        active={!filters.status && !filters.not_viewed}
+                        onClick={() => visit({ status: undefined, not_viewed: undefined })}
+                        label={t('documents.all')}
+                        count={total}
+                    />
                     {STATUSES.map((status) => (
-                        <Tab key={status} active={filters.status === status} onClick={() => visit({ status, not_viewed: undefined })} label={t(`statuses.${status}`)} count={counts[status] ?? 0} />
+                        <Tab
+                            key={status}
+                            active={filters.status === status}
+                            onClick={() => visit({ status, not_viewed: undefined })}
+                            label={t(`statuses.${status}`)}
+                            count={counts[status] ?? 0}
+                        />
                     ))}
                     <Tab
                         active={filters.not_viewed}
@@ -64,29 +75,29 @@ export default function DocumentsIndex({ type, documents, filters, counts, canCr
                     )
                 ) : (
                     <Card>
-                        <ul className="divide-y divide-line">
+                        <ul className="divide-line divide-y">
                             {documents.data.map((document) => (
                                 <li key={document.id}>
-                                    <Link href={`${url}/${document.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-4 hover:bg-surface">
+                                    <Link href={`${url}/${document.id}`} className="hover:bg-surface flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-4">
                                         <div className="min-w-0 flex-1">
-                                            <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+                                            <p className="text-ink flex items-center gap-2 text-sm font-semibold">
                                                 <span className="font-mono" dir="ltr">
                                                     {document.number}
                                                 </span>
-                                                <span className="truncate font-normal text-ink-muted">· {document.client_name}</span>
+                                                <span className="text-ink-muted truncate font-normal">· {document.client_name}</span>
                                             </p>
-                                            <p className="mt-1 flex flex-wrap gap-x-3 text-xs text-ink-subtle">
+                                            <p className="text-ink-subtle mt-1 flex flex-wrap gap-x-3 text-xs">
                                                 <span>{formatDate(document.issue_date)}</span>
                                                 {document.created_by && <span>{t('documents.created_by', { name: document.created_by })}</span>}
                                                 {document.not_viewed_warning && (
-                                                    <span className="inline-flex items-center gap-1 font-medium text-warning">
+                                                    <span className="text-warning inline-flex items-center gap-1 font-medium">
                                                         <AlertTriangle className="size-3.5" />
                                                         {t('documents.not_viewed_warning', { time: timeAgo(document.sent_at) })}
                                                     </span>
                                                 )}
                                             </p>
                                         </div>
-                                        <p className="text-sm font-semibold text-ink" dir="ltr">
+                                        <p className="text-ink text-sm font-semibold" dir="ltr">
                                             {formatMoney(document.total, document.currency)}
                                         </p>
                                         <StatusBadge status={document.status} />
@@ -119,18 +130,24 @@ function Tab({ active, onClick, label, count, warning }) {
             aria-pressed={active}
             className={cn(
                 'inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors',
-                active ? 'bg-card text-brand-700 shadow-card ring-1 ring-line' : 'text-ink-muted hover:bg-card hover:text-ink',
+                active ? 'bg-card text-brand-700 shadow-card ring-line ring-1' : 'text-ink-muted hover:bg-card hover:text-ink',
                 warning && !active && 'text-warning',
             )}
         >
             {warning && <AlertTriangle className="size-4" />}
             {label}
-            {count !== undefined && <span className="rounded-full bg-surface px-1.5 text-xs text-ink-subtle ring-1 ring-line">{count}</span>}
+            {count !== undefined && <span className="bg-surface text-ink-subtle ring-line rounded-full px-1.5 text-xs ring-1">{count}</span>}
         </button>
     );
 }
 
-Tab.propTypes = { active: PropTypes.bool, onClick: PropTypes.func.isRequired, label: PropTypes.string.isRequired, count: PropTypes.number, warning: PropTypes.bool };
+Tab.propTypes = {
+    active: PropTypes.bool,
+    onClick: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    count: PropTypes.number,
+    warning: PropTypes.bool,
+};
 
 /** Searches as you type (debounced). */
 function SearchBox({ initial, placeholder, onSearch }) {
@@ -149,14 +166,14 @@ function SearchBox({ initial, placeholder, onSearch }) {
 
     return (
         <div className="relative">
-            <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-ink-subtle" />
+            <Search className="text-ink-subtle pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2" />
             <input
                 type="search"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 placeholder={placeholder}
                 aria-label={placeholder}
-                className="h-11 w-full rounded-xl border border-line-strong bg-card ps-9 pe-3 text-sm placeholder:text-ink-subtle focus:border-brand-500 focus:ring-3 focus:ring-brand-100 focus:outline-none"
+                className="border-line-strong bg-card placeholder:text-ink-subtle focus:border-brand-500 focus:ring-brand-100 h-11 w-full rounded-xl border ps-9 pe-3 text-sm focus:ring-3 focus:outline-none"
             />
         </div>
     );

@@ -10,7 +10,12 @@ import SettingsLayout, { SaveButton, SettingsCard } from '@/Layouts/SettingsLayo
 import { formatNumber } from '@/lib/format';
 import { useT } from '@/lib/i18n';
 
-const taxShape = PropTypes.shape({ id: PropTypes.number.isRequired, name: PropTypes.string.isRequired, rate: PropTypes.number.isRequired, is_default: PropTypes.bool.isRequired });
+const taxShape = PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    rate: PropTypes.number.isRequired,
+    is_default: PropTypes.bool.isRequired,
+});
 
 export default function Taxes({ taxRates, presets, currency, currencies, allCurrencies }) {
     const t = useT();
@@ -20,9 +25,9 @@ export default function Taxes({ taxRates, presets, currency, currencies, allCurr
         <SettingsLayout>
             <SettingsCard title={t('settings.taxes.rates')} intro={t('settings.taxes.rates_intro')}>
                 {taxRates.length === 0 ? (
-                    <p className="rounded-xl border border-dashed border-line-strong p-6 text-center text-sm text-ink-subtle">{t('settings.taxes.empty')}</p>
+                    <p className="border-line-strong text-ink-subtle rounded-xl border border-dashed p-6 text-center text-sm">{t('settings.taxes.empty')}</p>
                 ) : (
-                    <ul className="divide-y divide-line rounded-xl border border-line">
+                    <ul className="divide-line border-line divide-y rounded-xl border">
                         {taxRates.map((tax) => (
                             <TaxRow key={tax.id} tax={tax} onDelete={() => setDeleting(tax)} />
                         ))}
@@ -68,8 +73,26 @@ function TaxRow({ tax, onDelete }) {
         return (
             <li className="p-3">
                 <form onSubmit={save} className="flex flex-wrap items-start gap-2">
-                    <TextInput className="h-9 min-w-40 flex-1" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} error={form.errors.name} aria-label={t('settings.taxes.name')} required />
-                    <TextInput className="h-9 w-24" type="number" step="0.001" min="0" max="100" value={form.data.rate} onChange={(e) => form.setData('rate', e.target.value)} error={form.errors.rate} aria-label={t('settings.taxes.rate')} required />
+                    <TextInput
+                        className="h-9 min-w-40 flex-1"
+                        value={form.data.name}
+                        onChange={(e) => form.setData('name', e.target.value)}
+                        error={form.errors.name}
+                        aria-label={t('settings.taxes.name')}
+                        required
+                    />
+                    <TextInput
+                        className="h-9 w-24"
+                        type="number"
+                        step="0.001"
+                        min="0"
+                        max="100"
+                        value={form.data.rate}
+                        onChange={(e) => form.setData('rate', e.target.value)}
+                        error={form.errors.rate}
+                        aria-label={t('settings.taxes.rate')}
+                        required
+                    />
                     <Button type="submit" size="sm" disabled={form.processing} aria-label={t('common.save')}>
                         <Check className="size-4" />
                     </Button>
@@ -84,12 +107,12 @@ function TaxRow({ tax, onDelete }) {
     return (
         <li className="flex items-center gap-3 px-4 py-3">
             <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-2 text-sm font-medium text-ink">
+                <p className="text-ink flex items-center gap-2 text-sm font-medium">
                     {tax.name}
                     {tax.is_default && <Badge tone="brand">{t('settings.taxes.default')}</Badge>}
                 </p>
             </div>
-            <span className="text-sm font-semibold text-ink" dir="ltr">
+            <span className="text-ink text-sm font-semibold" dir="ltr">
                 {formatNumber(tax.rate)}%
             </span>
             {!tax.is_default && (
@@ -124,7 +147,7 @@ function AddTaxForm({ presets }) {
     };
 
     return (
-        <form onSubmit={submit} className="grid gap-3 rounded-xl bg-surface p-4 sm:grid-cols-[1fr_7rem_auto] sm:items-start">
+        <form onSubmit={submit} className="bg-surface grid gap-3 rounded-xl p-4 sm:grid-cols-[1fr_7rem_auto] sm:items-start">
             <div className="space-y-2 sm:col-span-3">
                 <Select value="" onChange={(e) => applyPreset(e.target.value)} className="h-9 sm:w-72" aria-label={t('settings.taxes.add_preset')}>
                     <option value="">{t('settings.taxes.add_preset')}</option>
@@ -140,7 +163,17 @@ function AddTaxForm({ presets }) {
             </Field>
             <Field label={t('settings.taxes.rate')} error={form.errors.rate}>
                 {(id) => (
-                    <TextInput id={id} type="number" step="0.001" min="0" max="100" value={form.data.rate} onChange={(e) => form.setData('rate', e.target.value)} error={form.errors.rate} required />
+                    <TextInput
+                        id={id}
+                        type="number"
+                        step="0.001"
+                        min="0"
+                        max="100"
+                        value={form.data.rate}
+                        onChange={(e) => form.setData('rate', e.target.value)}
+                        error={form.errors.rate}
+                        required
+                    />
                 )}
             </Field>
             <Button type="submit" className="sm:mt-6.5" icon={<Plus className="size-4" />} disabled={form.processing}>
@@ -166,7 +199,11 @@ function CurrenciesForm({ currency, currencies, allCurrencies }) {
 
     return (
         <form onSubmit={submit}>
-            <SettingsCard title={t('settings.taxes.currencies')} intro={t('settings.taxes.currencies_intro')} footer={<SaveButton processing={form.processing} />}>
+            <SettingsCard
+                title={t('settings.taxes.currencies')}
+                intro={t('settings.taxes.currencies_intro')}
+                footer={<SaveButton processing={form.processing} />}
+            >
                 <Field label={t('settings.taxes.default_currency')} error={form.errors.currency} className="sm:w-72">
                     {(id) => (
                         <Select id={id} value={form.data.currency} onChange={(e) => form.setData('currency', e.target.value)} error={form.errors.currency}>
@@ -179,28 +216,31 @@ function CurrenciesForm({ currency, currencies, allCurrencies }) {
                     )}
                 </Field>
                 <fieldset>
-                    <legend className="mb-2 text-sm font-medium text-ink">{t('settings.taxes.enabled_currencies')}</legend>
+                    <legend className="text-ink mb-2 text-sm font-medium">{t('settings.taxes.enabled_currencies')}</legend>
                     <div className="grid gap-2 sm:grid-cols-3">
                         {allCurrencies.map(({ code, name }) => {
                             const isDefault = code === form.data.currency;
                             return (
-                                <label key={code} className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-line px-3 py-2 text-sm has-checked:border-brand-500 has-checked:bg-brand-50">
+                                <label
+                                    key={code}
+                                    className="border-line has-checked:border-brand-500 has-checked:bg-brand-50 flex cursor-pointer items-center gap-2.5 rounded-xl border px-3 py-2 text-sm"
+                                >
                                     <input
                                         type="checkbox"
-                                        className="size-4 accent-brand-600"
+                                        className="accent-brand-600 size-4"
                                         checked={isDefault || form.data.currencies.includes(code)}
                                         disabled={isDefault}
                                         onChange={() => toggle(code)}
                                     />
-                                    <span className="flex-1 text-ink">{name}</span>
-                                    <span className="text-xs text-ink-subtle" dir="ltr">
+                                    <span className="text-ink flex-1">{name}</span>
+                                    <span className="text-ink-subtle text-xs" dir="ltr">
                                         {code}
                                     </span>
                                 </label>
                             );
                         })}
                     </div>
-                    {form.errors.currencies && <p className="mt-2 text-xs font-medium text-danger">{form.errors.currencies}</p>}
+                    {form.errors.currencies && <p className="text-danger mt-2 text-xs font-medium">{form.errors.currencies}</p>}
                 </fieldset>
             </SettingsCard>
         </form>

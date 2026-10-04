@@ -8,7 +8,7 @@ export default function PrintLayout({ title, children }) {
             <Head title={title}>
                 <meta name="robots" content="noindex, nofollow" />
             </Head>
-            <main className="mx-auto min-h-screen max-w-[210mm] bg-white p-[12mm] text-ink print:p-0">{children}</main>
+            <main className="text-ink mx-auto min-h-screen max-w-[210mm] bg-white p-[12mm] print:p-0">{children}</main>
         </>
     );
 }

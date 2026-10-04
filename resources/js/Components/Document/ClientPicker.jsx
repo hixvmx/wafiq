@@ -16,13 +16,13 @@ export function ClientPicker({ client, onChange, onAddNew, canAdd, error }) {
     if (client) {
         const Icon = client.type === 'person' ? User : Building2;
         return (
-            <div className="flex items-center gap-3 rounded-xl border border-line-strong bg-surface px-4 py-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700">
+            <div className="border-line-strong bg-surface flex items-center gap-3 rounded-xl border px-4 py-3">
+                <span className="bg-brand-50 text-brand-700 flex size-10 shrink-0 items-center justify-center rounded-full">
                     <Icon className="size-5" />
                 </span>
                 <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-ink">{client.name}</p>
-                    <p className="flex flex-wrap gap-x-3 text-xs text-ink-muted">
+                    <p className="text-ink truncate text-sm font-semibold">{client.name}</p>
+                    <p className="text-ink-muted flex flex-wrap gap-x-3 text-xs">
                         {client.contact_name && <span>{client.contact_name}</span>}
                         {client.phone && (
                             <span className="inline-flex items-center gap-1" dir="ltr">
@@ -54,9 +54,9 @@ export function ClientPicker({ client, onChange, onAddNew, canAdd, error }) {
                 aria-label={t('documents.client')}
                 renderOption={(option) => (
                     <div className="flex items-center justify-between gap-3">
-                        <span className="truncate font-medium text-ink">{option.name}</span>
+                        <span className="text-ink truncate font-medium">{option.name}</span>
                         {option.phone && (
-                            <span className="shrink-0 text-xs text-ink-subtle" dir="ltr">
+                            <span className="text-ink-subtle shrink-0 text-xs" dir="ltr">
                                 {option.phone}
                             </span>
                         )}
@@ -71,7 +71,7 @@ export function ClientPicker({ client, onChange, onAddNew, canAdd, error }) {
                                       close();
                                       onAddNew(query);
                                   }}
-                                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-brand-700 hover:bg-brand-50"
+                                  className="text-brand-700 hover:bg-brand-50 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold"
                               >
                                   <Plus className="size-4" />
                                   {t('documents.form.new_client')}
@@ -81,7 +81,7 @@ export function ClientPicker({ client, onChange, onAddNew, canAdd, error }) {
                 }
             />
             {error && (
-                <p className="mt-1.5 text-xs font-medium text-danger" role="alert">
+                <p className="text-danger mt-1.5 text-xs font-medium" role="alert">
                     {error}
                 </p>
             )}

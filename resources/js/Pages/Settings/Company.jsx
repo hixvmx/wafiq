@@ -47,7 +47,15 @@ export default function Company({ profile }) {
                         ))}
                     </div>
                     <Field label={t('settings.company.address')} error={form.errors.address}>
-                        {(id) => <TextArea id={id} className="min-h-20" value={text('address')} onChange={(e) => form.setData('address', e.target.value)} error={form.errors.address} />}
+                        {(id) => (
+                            <TextArea
+                                id={id}
+                                className="min-h-20"
+                                value={text('address')}
+                                onChange={(e) => form.setData('address', e.target.value)}
+                                error={form.errors.address}
+                            />
+                        )}
                     </Field>
                     <Field label={t('settings.company.bank_details')} hint={t('settings.company.bank_details_hint')} error={form.errors.bank_details}>
                         {(id, describedBy) => (

@@ -6,6 +6,7 @@ use App\Enums\DocumentStatus;
 use App\Enums\Role;
 use App\Models\Document;
 use App\Models\User;
+use App\Services\DocumentWorkflow;
 
 /**
  * Who may do what with a quotation or invoice (section 7 of idea-wafiq.md).
@@ -33,6 +34,21 @@ class DocumentPolicy
     public function revise(User $user, Document $document): bool
     {
         return ! $document->isDraft() && $document->is_latest && $this->manages($user, $document);
+    }
+
+    /** Send (or resend) by email, WhatsApp or link. */
+    public function send(User $user, Document $document): bool
+    {
+        return $this->manages($user, $document) && app(DocumentWorkflow::class)->canSend($document);
+    }
+
+    /** New validity date, e.g. to bring an expired quote back. */
+    public function extend(User $user, Document $document): bool
+    {
+        return $this->manages($user, $document)
+            && $document->is_latest
+            && ! $document->isDraft()
+            && ! $document->status->isFinal();
     }
 
     public function duplicate(User $user, Document $document): bool

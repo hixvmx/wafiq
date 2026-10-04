@@ -119,10 +119,20 @@ function ClientForm({ client, phoneCodes, onDone, onCreated }) {
                 {isCompany && input('contact_name')}
                 {input('email', { input: { type: 'email' } })}
 
-                <Field label={t('clients.phone')} hint={t('clients.phone_hint')} error={form.errors.phone_number ?? form.errors.phone_code} className="sm:col-span-2">
+                <Field
+                    label={t('clients.phone')}
+                    hint={t('clients.phone_hint')}
+                    error={form.errors.phone_number ?? form.errors.phone_code}
+                    className="sm:col-span-2"
+                >
                     {(id, describedBy) => (
                         <div className="flex gap-2" dir="ltr">
-                            <Select value={form.data.phone_code ?? ''} onChange={(e) => form.setData('phone_code', e.target.value)} className="w-32 shrink-0" aria-label={t('clients.phone_code')}>
+                            <Select
+                                value={form.data.phone_code ?? ''}
+                                onChange={(e) => form.setData('phone_code', e.target.value)}
+                                className="w-32 shrink-0"
+                                aria-label={t('clients.phone_code')}
+                            >
                                 {codes.map(([country, code]) => (
                                     <option key={country} value={code}>
                                         {country} +{code}
@@ -148,10 +158,18 @@ function ClientForm({ client, phoneCodes, onDone, onCreated }) {
             </div>
 
             <Field label={t('clients.address')} error={form.errors.address}>
-                {(id) => <TextArea id={id} className="min-h-20" value={form.data.address ?? ''} onChange={(e) => form.setData('address', e.target.value)} error={form.errors.address} />}
+                {(id) => (
+                    <TextArea
+                        id={id}
+                        className="min-h-20"
+                        value={form.data.address ?? ''}
+                        onChange={(e) => form.setData('address', e.target.value)}
+                        error={form.errors.address}
+                    />
+                )}
             </Field>
 
-            <div className="flex justify-end gap-2 border-t border-line pt-4">
+            <div className="border-line flex justify-end gap-2 border-t pt-4">
                 <Button variant="secondary" onClick={onDone}>
                     {t('common.cancel')}
                 </Button>
