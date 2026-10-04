@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { LayoutDashboard, Menu, X } from 'lucide-react';
+import { LayoutDashboard, LogOut, Menu, Users, X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Avatar } from '@/Components/ui/Card';
@@ -8,10 +8,13 @@ import { cn } from '@/lib/format';
 import { useT } from '@/lib/i18n';
 
 /**
- * Sidebar items. Each build phase adds its own (quotes, invoices, clients, items, team, settings).
- * `match` is the URL prefix that marks the item as active.
+ * Sidebar items. Each build phase adds its own (quotes, invoices, clients, items, settings).
+ * `match` is the URL prefix that marks the item as active; `can` hides it without that permission.
  */
-const NAV = [{ key: 'dashboard', href: '/', match: '/', icon: LayoutDashboard }];
+const NAV = [
+    { key: 'dashboard', href: '/', match: '/', icon: LayoutDashboard },
+    { key: 'team', href: '/team', match: '/team', icon: Users, can: 'manage_team' },
+];
 
 /** The team's workspace: sidebar on desktop, slide-in menu on phones. */
 export default function AppLayout({ title, actions, children }) {
@@ -21,7 +24,7 @@ export default function AppLayout({ title, actions, children }) {
 
     const sidebar = (
         <nav className="flex flex-1 flex-col gap-1 p-3">
-            {NAV.map(({ key, href, match, icon: Icon }) => (
+            {NAV.filter((item) => !item.can || auth.can?.[item.can]).map(({ key, href, match, icon: Icon }) => (
                 <NavLink key={key} href={href} match={match} onClick={() => setMenuOpen(false)}>
                     <Icon className="size-5" />
                     {t(`nav.${key}`)}
@@ -110,15 +113,27 @@ function NavLink({ href, match, onClick, children }) {
 NavLink.propTypes = { href: PropTypes.string.isRequired, match: PropTypes.string.isRequired, onClick: PropTypes.func, children: PropTypes.node };
 
 function UserBox({ user }) {
+    const t = useT();
+
     return (
         <div className="flex items-center gap-3 border-t border-line p-4">
             <Avatar src={user.avatar} name={user.name} size={36} />
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-ink">{user.name}</p>
                 <p className="truncate text-xs text-ink-subtle" dir="ltr">
                     {user.email}
                 </p>
             </div>
+            <Link
+                href="/logout"
+                method="post"
+                as="button"
+                className="rounded-lg p-2 text-ink-subtle hover:bg-surface hover:text-ink"
+                aria-label={t('nav.logout')}
+                title={t('nav.logout')}
+            >
+                <LogOut className="size-4 rtl:-scale-x-100" />
+            </Link>
         </div>
     );
 }

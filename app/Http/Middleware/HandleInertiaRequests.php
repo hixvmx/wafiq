@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\Ability;
 use App\Services\CurrentCompany;
 use App\Support\Edition;
 use Illuminate\Http\Request;
@@ -35,7 +36,11 @@ class HandleInertiaRequests extends Middleware
             'company' => fn () => app(CurrentCompany::class)->get()?->only('id', 'name', 'logo', 'currency'),
             'auth' => [
                 'user' => $user?->only('id', 'name', 'email', 'avatar'),
-                'role' => fn () => $user?->roleIn(app(CurrentCompany::class)->get())?->value,
+                'role' => fn () => $user?->currentRole()?->value,
+                // e.g. auth.can.manage_team, to show or hide menu items and buttons.
+                'can' => fn () => $user
+                    ? collect(Ability::cases())->mapWithKeys(fn (Ability $ability) => [$ability->value => $user->can($ability->value)])
+                    : (object) [],
             ],
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),

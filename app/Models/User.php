@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Enums\Role;
+use App\Services\CurrentCompany;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -13,6 +15,9 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /** @var array<int, Role|null> memoised roles, see currentRole() */
+    private array $rolesByCompany = [];
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +68,12 @@ class User extends Authenticatable
         return $this->belongsToMany(Company::class)->withPivot('role')->withTimestamps();
     }
 
+    /** @return HasMany<LoginToken, $this> */
+    public function loginTokens(): HasMany
+    {
+        return $this->hasMany(LoginToken::class);
+    }
+
     /** The user's role in a company, or null when not a member. */
     public function roleIn(?Company $company): ?Role
     {
@@ -73,5 +84,27 @@ class User extends Authenticatable
         $role = $this->companies()->whereKey($company->id)->first()?->pivot->role;
 
         return $role ? Role::tryFrom($role) : null;
+    }
+
+    /** The user's role in the current company (memoised: permission checks call it often). */
+    public function currentRole(): ?Role
+    {
+        $company = app(CurrentCompany::class)->get();
+
+        if (! $company) {
+            return null;
+        }
+
+        if (! array_key_exists($company->id, $this->rolesByCompany)) {
+            $this->rolesByCompany[$company->id] = $this->roleIn($company);
+        }
+
+        return $this->rolesByCompany[$company->id];
+    }
+
+    /** Forget memoised roles after a role change. */
+    public function refreshRoles(): void
+    {
+        $this->rolesByCompany = [];
     }
 }

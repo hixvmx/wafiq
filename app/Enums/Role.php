@@ -16,9 +16,19 @@ enum Role: string
         return __("ui.roles.{$this->value}");
     }
 
-    /** Owner and Admin manage settings, branding and the team. */
-    public function managesCompany(): bool
+    public function allows(Ability $ability): bool
     {
-        return in_array($this, [self::Owner, self::Admin], true);
+        return in_array($this, $ability->roles(), true);
+    }
+
+    /**
+     * Roles that can be given through an invitation or a role change.
+     * There is exactly one Owner, created by the installer.
+     *
+     * @return list<self>
+     */
+    public static function assignable(): array
+    {
+        return [self::Admin, self::Accountant, self::Sales, self::Viewer];
     }
 }

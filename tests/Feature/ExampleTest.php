@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Company;
-use App\Services\CurrentCompany;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -14,14 +12,14 @@ class ExampleTest extends TestCase
 
     public function test_home_page_renders_with_shared_props(): void
     {
-        $company = Company::factory()->create(['name' => 'شركة الإتقان']);
-        app(CurrentCompany::class)->set($company); // the SaaS edition resolves it from the subdomain
+        $user = $this->member();
+        $this->company()->update(['name' => 'شركة الإتقان']);
 
-        $this->get('/')
+        $this->actingAs($user)->get('/')
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Welcome')
-                ->where('company.name', $company->name)
+                ->where('company.name', 'شركة الإتقان')
                 ->where('translations.nav.quotes', 'عروض الأسعار')
                 ->has('app.edition'));
     }

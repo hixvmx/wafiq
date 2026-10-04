@@ -347,12 +347,13 @@ wafiq/
 - [x] **SaaS-ready foundation:** `companies` + `company_user` tables, `BelongsToCompany` trait (global scope + auto `company_id`), `CurrentCompany` service, `APP_EDITION` config, test that companies are isolated
 
 ### Phase 1 — Auth & team
-- [ ] Owner created by an installer stub (full installer in Phase 10)
-- [ ] Magic link login (hashed tokens, expiry, single use, throttle, same response for unknown emails)
-- [ ] "Remember this device", optional password login, `wafiq:login-link` rescue command
-- [ ] Invitations (invite, resend, revoke, accept), roles + Policies, team page
-- [ ] Notifier + queued notifications + RTL mail theme + `lang/ar.json`
-- [ ] Tests: login link lifecycle, throttling, no account discovery, invitations, permissions matrix
+- [x] Owner created by an installer stub (`php artisan wafiq:setup`; full installer in Phase 10)
+- [x] Magic link login (hashed tokens, expiry, single use, throttle, same response for unknown emails). The link opens a confirm page and is only used on "Log in", so email scanners can't burn it
+- [x] `wafiq:login-link` rescue command
+- [ ] "Remember this device", optional password login *(hidden in the section 16 checklist, not in the MVP)*
+- [x] Invitations (invite, resend, revoke, accept), roles + permissions (`Ability` gates; document Policies come in Phase 4), team page (change role, remove member)
+- [x] Notifier + RTL mail theme + `lang/ar.json`. Login and invitation emails are sent **immediately** (not queued) so a missing queue cron never locks anyone out; other emails will be queued
+- [x] Tests: login link lifecycle, throttling, no account discovery, invitations, permissions matrix
 
 ### Phase 2 — Company settings
 - [ ] Company profile, branding (logo, colour, stamp, signature), bank details
