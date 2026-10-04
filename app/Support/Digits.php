@@ -12,4 +12,12 @@ final class Digits
             '۰' => '0', '۱' => '1', '۲' => '2', '۳' => '3', '۴' => '4', '۵' => '5', '۶' => '6', '۷' => '7', '۸' => '8', '۹' => '9',
         ]);
     }
+
+    /** A number typed in a form: "١٬٢٥٠٫٥" or "1,250.5 " → "1250.5". */
+    public static function decimal(mixed $value): string
+    {
+        $text = self::latin(trim((string) $value));
+
+        return str_replace([',', '٬', ' '], '', str_replace('٫', '.', $text));
+    }
 }

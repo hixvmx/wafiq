@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AcceptInvitationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CompanyProfileController;
@@ -40,6 +41,22 @@ Route::get('branding/{company}/{kind}', [BrandingController::class, 'show'])->na
 Route::middleware(['auth', 'member'])->group(function () {
     Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+
+    // Quotations and invoices: same controller, the "type" default tells them apart.
+    foreach (['quote' => 'quotes', 'invoice' => 'invoices'] as $type => $prefix) {
+        Route::prefix($prefix)->name("{$prefix}.")->controller(DocumentController::class)->group(function () use ($type) {
+            Route::get('/', 'index')->name('index')->defaults('type', $type);
+            Route::get('create', 'create')->name('create')->defaults('type', $type);
+            Route::post('/', 'store')->name('store')->defaults('type', $type);
+            Route::get('{document}', 'show')->name('show')->defaults('type', $type);
+            Route::get('{document}/edit', 'edit')->name('edit')->defaults('type', $type);
+            Route::put('{document}', 'update')->name('update')->defaults('type', $type);
+            Route::delete('{document}', 'destroy')->name('destroy')->defaults('type', $type);
+            Route::post('{document}/duplicate', 'duplicate')->name('duplicate')->defaults('type', $type);
+            Route::post('{document}/revise', 'revise')->name('revise')->defaults('type', $type);
+            Route::post('{document}/convert', 'convert')->name('convert')->defaults('type', $type);
+        });
+    }
 
     // Every member can browse clients and the catalog; editing needs the matching permission.
     Route::get('clients', [ClientController::class, 'index'])->name('clients.index');

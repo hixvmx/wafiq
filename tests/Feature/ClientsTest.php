@@ -42,6 +42,17 @@ class ClientsTest extends TestCase
         $this->assertSame($this->company()->id, $client->company_id);
     }
 
+    public function test_the_document_editor_creates_a_client_and_gets_it_back_as_json(): void
+    {
+        $this->actingAs($this->sales)
+            ->postJson('/clients', ['type' => 'person', 'name' => 'محمد', 'phone_code' => '966', 'phone_number' => '0561239876'])
+            ->assertCreated()
+            ->assertJsonPath('client.name', 'محمد')
+            ->assertJsonPath('client.phone', '+966561239876');
+
+        $this->actingAs($this->sales)->postJson('/clients', ['type' => 'person', 'name' => ''])->assertUnprocessable()->assertJsonValidationErrors('name');
+    }
+
     public function test_invalid_phone_and_missing_name(): void
     {
         $this->actingAs($this->sales)

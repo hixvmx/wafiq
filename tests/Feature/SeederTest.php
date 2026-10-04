@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Client;
 use App\Models\Company;
+use App\Models\Document;
 use App\Models\Item;
 use App\Models\TaxRate;
 use Database\Seeders\DatabaseSeeder;
@@ -20,7 +21,7 @@ class SeederTest extends TestCase
 
         $company = Company::sole();
 
-        foreach ([TaxRate::class, Client::class, Item::class] as $model) {
+        foreach ([TaxRate::class, Client::class, Item::class, Document::class] as $model) {
             $rows = $model::withoutGlobalScopes()->get();
             $this->assertNotEmpty($rows, $model);
             $this->assertTrue($rows->every(fn ($row) => $row->company_id === $company->id), $model);

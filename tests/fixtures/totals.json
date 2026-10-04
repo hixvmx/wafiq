@@ -1,0 +1,95 @@
+[
+    {
+        "name": "one line with VAT",
+        "input": { "lines": [{ "qty": "1", "unit_price_minor": 10000, "discount": "0", "tax_rate": "15" }], "discount": { "type": "percent", "value": "0" } },
+        "expected": {
+            "lines": [{ "gross": 10000, "discount": 0, "net": 10000, "discount_share": 0, "taxable": 10000, "tax": 1500 }],
+            "subtotal": 10000, "discount": 0, "taxable": 10000, "tax": 1500, "total": 11500
+        }
+    },
+    {
+        "name": "fractional quantity and line discount round half up",
+        "input": { "lines": [{ "qty": "2.5", "unit_price_minor": 333, "discount": "10", "tax_rate": "15" }], "discount": { "type": "percent", "value": "0" } },
+        "expected": {
+            "lines": [{ "gross": 833, "discount": 83, "net": 750, "discount_share": 0, "taxable": 750, "tax": 113 }],
+            "subtotal": 750, "discount": 0, "taxable": 750, "tax": 113, "total": 863
+        }
+    },
+    {
+        "name": "document discount spread before tax across different rates",
+        "input": {
+            "lines": [
+                { "qty": "1", "unit_price_minor": 10000, "discount": "0", "tax_rate": "15" },
+                { "qty": "1", "unit_price_minor": 5000, "discount": "0", "tax_rate": "0" }
+            ],
+            "discount": { "type": "percent", "value": "10" }
+        },
+        "expected": {
+            "lines": [
+                { "gross": 10000, "discount": 0, "net": 10000, "discount_share": 1000, "taxable": 9000, "tax": 1350 },
+                { "gross": 5000, "discount": 0, "net": 5000, "discount_share": 500, "taxable": 4500, "tax": 0 }
+            ],
+            "subtotal": 15000, "discount": 1500, "taxable": 13500, "tax": 1350, "total": 14850
+        }
+    },
+    {
+        "name": "fixed discount remainder goes to the first lines",
+        "input": {
+            "lines": [
+                { "qty": "1", "unit_price_minor": 1, "discount": "0", "tax_rate": "0" },
+                { "qty": "1", "unit_price_minor": 1, "discount": "0", "tax_rate": "0" },
+                { "qty": "1", "unit_price_minor": 1, "discount": "0", "tax_rate": "0" }
+            ],
+            "discount": { "type": "amount", "value": 2 }
+        },
+        "expected": {
+            "lines": [
+                { "gross": 1, "discount": 0, "net": 1, "discount_share": 1, "taxable": 0, "tax": 0 },
+                { "gross": 1, "discount": 0, "net": 1, "discount_share": 1, "taxable": 0, "tax": 0 },
+                { "gross": 1, "discount": 0, "net": 1, "discount_share": 0, "taxable": 1, "tax": 0 }
+            ],
+            "subtotal": 3, "discount": 2, "taxable": 1, "tax": 0, "total": 1
+        }
+    },
+    {
+        "name": "fixed discount larger than the subtotal is capped",
+        "input": { "lines": [{ "qty": "1", "unit_price_minor": 1000, "discount": "0", "tax_rate": "15" }], "discount": { "type": "amount", "value": 5000 } },
+        "expected": {
+            "lines": [{ "gross": 1000, "discount": 0, "net": 1000, "discount_share": 1000, "taxable": 0, "tax": 0 }],
+            "subtotal": 1000, "discount": 1000, "taxable": 0, "tax": 0, "total": 0
+        }
+    },
+    {
+        "name": "three-decimal currency (KWD) with 5% tax",
+        "input": { "lines": [{ "qty": "3", "unit_price_minor": 1250, "discount": "0", "tax_rate": "5" }], "discount": { "type": "percent", "value": "0" } },
+        "expected": {
+            "lines": [{ "gross": 3750, "discount": 0, "net": 3750, "discount_share": 0, "taxable": 3750, "tax": 188 }],
+            "subtotal": 3750, "discount": 0, "taxable": 3750, "tax": 188, "total": 3938
+        }
+    },
+    {
+        "name": "unequal spread uses largest remainders",
+        "input": {
+            "lines": [
+                { "qty": "1", "unit_price_minor": 700, "discount": "0", "tax_rate": "15" },
+                { "qty": "1", "unit_price_minor": 300, "discount": "0", "tax_rate": "15" }
+            ],
+            "discount": { "type": "amount", "value": 5 }
+        },
+        "expected": {
+            "lines": [
+                { "gross": 700, "discount": 0, "net": 700, "discount_share": 4, "taxable": 696, "tax": 104 },
+                { "gross": 300, "discount": 0, "net": 300, "discount_share": 1, "taxable": 299, "tax": 45 }
+            ],
+            "subtotal": 1000, "discount": 5, "taxable": 995, "tax": 149, "total": 1144
+        }
+    },
+    {
+        "name": "large amounts stay exact (values as strings: beyond JavaScript number precision)",
+        "input": { "lines": [{ "qty": "999999.999", "unit_price_minor": 99999999999, "discount": "12.345", "tax_rate": "15" }], "discount": { "type": "percent", "value": "0" } },
+        "expected": {
+            "lines": [{ "gross": "99999999899000000", "discount": "12344999987531550", "net": "87654999911468450", "discount_share": "0", "taxable": "87654999911468450", "tax": "13148249986720268" }],
+            "subtotal": "87654999911468450", "discount": "0", "taxable": "87654999911468450", "tax": "13148249986720268", "total": "100803249898188718"
+        }
+    }
+]

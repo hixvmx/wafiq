@@ -18,6 +18,7 @@ enum Ability: string
     case ViewReports = 'view_reports';
     case ManageClients = 'manage_clients';
     case ManageItems = 'manage_items';
+    case CreateInvoices = 'create_invoices'; // Sales make invoices only from their own approved quotes
 
     /** @return list<Role> */
     public function roles(): array
@@ -26,7 +27,7 @@ enum Ability: string
             self::ManageSettings, self::ManageTeam, self::ReviewDocuments => [Role::Owner, Role::Admin],
             self::CreateDocuments, self::ManageClients => [Role::Owner, Role::Admin, Role::Accountant, Role::Sales],
             self::ManageItems => [Role::Owner, Role::Admin, Role::Accountant],
-            self::RecordPayments => [Role::Owner, Role::Admin, Role::Accountant],
+            self::RecordPayments, self::CreateInvoices => [Role::Owner, Role::Admin, Role::Accountant],
             self::ViewAllDocuments, self::ViewReports => [Role::Owner, Role::Admin, Role::Accountant, Role::Viewer],
         };
     }

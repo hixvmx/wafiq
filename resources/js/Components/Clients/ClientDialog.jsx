@@ -1,6 +1,8 @@
 import { useForm } from '@inertiajs/react';
+import axios from 'axios';
 import { Building2, User } from 'lucide-react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { Button } from '@/Components/ui/Button';
 import { Dialog } from '@/Components/ui/Dialog';
 import { Field, Select, TextArea, TextInput } from '@/Components/ui/Field';
@@ -9,14 +11,17 @@ import { useT } from '@/lib/i18n';
 
 const EMPTY = { type: 'company', name: '', contact_name: '', email: '', phone_code: '966', phone_number: '', vat_number: '', cr_number: '', address: '' };
 
-/** Create or edit a client. Pass `client` to edit; omit it to create. */
-export function ClientDialog({ open, client, phoneCodes, onClose }) {
+/**
+ * Create or edit a client. Pass `client` to edit; omit it to create.
+ * With `onCreated`, a new client is saved without a page visit and handed back (document editor).
+ */
+export function ClientDialog({ open, client, phoneCodes, onClose, onCreated }) {
     const t = useT();
 
     return (
         <Dialog open={open} title={client ? t('clients.edit') : t('clients.add')} onClose={onClose} size="lg">
             {/* Remount per client so the form starts from that client's values. */}
-            <ClientForm key={client?.id ?? 'new'} client={client} phoneCodes={phoneCodes} onDone={onClose} />
+            <ClientForm key={client?.id ?? 'new'} client={client} phoneCodes={phoneCodes} onDone={onClose} onCreated={onCreated} />
         </Dialog>
     );
 }
@@ -34,16 +39,35 @@ ClientDialog.propTypes = {
     client: clientShape,
     phoneCodes: PropTypes.objectOf(PropTypes.string).isRequired,
     onClose: PropTypes.func.isRequired,
+    onCreated: PropTypes.func,
 };
 
-function ClientForm({ client, phoneCodes, onDone }) {
+function ClientForm({ client, phoneCodes, onDone, onCreated }) {
     const t = useT();
     const initial = client ? Object.fromEntries(Object.keys(EMPTY).map((key) => [key, client[key] ?? EMPTY[key]])) : EMPTY;
     const form = useForm(initial);
+    const [saving, setSaving] = useState(false); // quick-create mode posts with axios, not Inertia
     const isCompany = form.data.type === 'company';
 
     const submit = (e) => {
         e.preventDefault();
+        if (!client && onCreated) {
+            form.clearErrors();
+            setSaving(true);
+            axios
+                .post('/clients', form.data, { headers: { Accept: 'application/json' } })
+                .then(({ data }) => {
+                    onCreated(data.client);
+                    onDone();
+                })
+                .catch((error) => {
+                    const errors = error.response?.data?.errors ?? {};
+                    form.setError(Object.fromEntries(Object.entries(errors).map(([key, messages]) => [key, messages[0]])));
+                })
+                .finally(() => setSaving(false));
+            return;
+        }
+
         const options = { preserveScroll: true, onSuccess: onDone };
         client ? form.put(`/clients/${client.id}`, options) : form.post('/clients', options);
     };
@@ -131,12 +155,17 @@ function ClientForm({ client, phoneCodes, onDone }) {
                 <Button variant="secondary" onClick={onDone}>
                     {t('common.cancel')}
                 </Button>
-                <Button type="submit" disabled={form.processing}>
-                    {form.processing ? t('common.saving') : t('common.save')}
+                <Button type="submit" disabled={form.processing || saving}>
+                    {form.processing || saving ? t('common.saving') : t('common.save')}
                 </Button>
             </div>
         </form>
     );
 }
 
-ClientForm.propTypes = { client: clientShape, phoneCodes: PropTypes.objectOf(PropTypes.string).isRequired, onDone: PropTypes.func.isRequired };
+ClientForm.propTypes = {
+    client: clientShape,
+    phoneCodes: PropTypes.objectOf(PropTypes.string).isRequired,
+    onDone: PropTypes.func.isRequired,
+    onCreated: PropTypes.func,
+};

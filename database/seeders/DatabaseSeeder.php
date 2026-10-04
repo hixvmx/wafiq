@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Actions\SaveDocument;
 use App\Enums\Role;
 use App\Models\Client;
 use App\Models\Company;
@@ -50,5 +51,22 @@ class DatabaseSeeder extends Seeder
             ['type' => 'product', 'name' => 'مكيف سبليت 18000 وحدة', 'unit' => 'قطعة', 'price_minor' => 245000],
             ['type' => 'service', 'name' => 'زيارة فنية', 'unit' => 'زيارة', 'price_minor' => 15000],
         ]);
+
+        // A sample draft quote: 120 m² of flooring + a visit, VAT 15%, 5% discount.
+        $vat = TaxRate::first();
+        app(SaveDocument::class)->handle(null, 'quote', [
+            'client_id' => Client::first()->id,
+            'currency' => 'SAR',
+            'issue_date' => now()->toDateString(),
+            'valid_until' => now()->addDays(15)->toDateString(),
+            'discount_type' => 'percent',
+            'discount_value' => '5',
+            'notes' => 'شكراً لثقتكم.',
+            'terms' => $company->preferences()->get('documents.quote.terms'),
+            'lines' => [
+                ['item_id' => Item::first()->id, 'name' => 'تركيب أرضيات بورسلان', 'qty' => '120', 'unit' => 'م²', 'unit_price' => '85.00', 'discount' => '0', 'tax_rate_id' => $vat->id],
+                ['name' => 'زيارة فنية', 'qty' => '1', 'unit' => 'زيارة', 'unit_price' => '150.00', 'discount' => '0', 'tax_rate_id' => $vat->id],
+            ],
+        ], $owner);
     }
 }

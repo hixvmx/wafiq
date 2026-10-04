@@ -370,14 +370,14 @@ wafiq/
 - [ ] CSV import / export *(hidden in the section 16 checklist)*
 
 ### Phase 4 — Documents (quotations & invoices)
-- [ ] Money + TotalsCalculator (PHP) mirrored in `lib/money.js`, shared test cases
-- [ ] Arabic amount-in-words service (ريال، درهم، جنيه، دينار، دولار، يورو)
-- [ ] Line items editor (add / remove / reorder, item search, qty, unit, price, discount, tax, live totals)
-- [ ] Create / edit / duplicate drafts; number reservation in a transaction
-- [ ] Optional internal review (amount limit, approve / request changes)
-- [ ] Revisions (v2, v3…) with the "replaced" behaviour on old links
-- [ ] Convert approved quotation → invoice
-- [ ] Lists with status filters, search, "not viewed after X days" filter
+- [x] Money + TotalsCalculator (PHP, exact big-number maths via brick/math) mirrored in `lib/totals.js` (BigInt); shared cases in `tests/fixtures/totals.json` run by PHPUnit and `npm run test:js`
+- [x] Arabic amount-in-words service (ريال، درهم، جنيه، دينار، دولار، يورو)
+- [x] Line items editor (add / remove / reorder, item search, qty, unit, price, discount, tax, live totals)
+- [x] Create / edit / duplicate drafts; number reserved in a transaction when the draft is first saved (a deleted draft leaves a gap in the numbering)
+- [ ] Optional internal review (amount limit, approve / request changes) *(hidden in the section 16 checklist)*
+- [x] Revisions (v2, v3…): a sent document is revised, not edited; the "replaced" page for old links comes with the client page in Phase 5
+- [x] Convert approved quotation → invoice
+- [x] Lists with status filters, search, "not viewed after X days" filter
 
 ### Phase 5 — Sharing & tracking ⭐ (the core of Wafiq)
 - [ ] `document_sends`: one tracked link per send (channel + recipient + hashed token)

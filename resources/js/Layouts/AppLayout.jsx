@@ -1,5 +1,5 @@
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Contact, LayoutDashboard, LogOut, Menu, Package, Settings, Users, X } from 'lucide-react';
+import { Contact, FileText, LayoutDashboard, LogOut, Menu, Package, Receipt, Settings, Users, X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Avatar } from '@/Components/ui/Card';
@@ -13,6 +13,8 @@ import { useT } from '@/lib/i18n';
  */
 const NAV = [
     { key: 'dashboard', href: '/', match: '/', icon: LayoutDashboard },
+    { key: 'quotes', href: '/quotes', match: '/quotes', icon: FileText },
+    { key: 'invoices', href: '/invoices', match: '/invoices', icon: Receipt },
     { key: 'clients', href: '/clients', match: '/clients', icon: Contact },
     { key: 'items', href: '/items', match: '/items', icon: Package },
     { key: 'team', href: '/team', match: '/team', icon: Users, can: 'manage_team' },

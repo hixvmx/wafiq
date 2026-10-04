@@ -41,9 +41,14 @@ class ClientController extends Controller
         return response()->json(['data' => $clients->map(fn (Client $client) => $client->toFormArray())]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
-        Client::create([...$this->validated($request), 'owner_id' => $request->user()->id]);
+        $client = Client::create([...$this->validated($request), 'owner_id' => $request->user()->id]);
+
+        // The document editor adds a client without leaving the page.
+        if ($request->wantsJson()) {
+            return response()->json(['client' => $client->toFormArray()], 201);
+        }
 
         return back()->with('success', __('ui.clients.created'));
     }
