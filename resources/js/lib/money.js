@@ -4,6 +4,18 @@
  */
 
 /**
+ * "12500.50" → "12,500.50": thousands separators on a decimal string, digits untouched
+ * (no float rounding). Mirrors App\Support\Money::group().
+ * @param {string|number} decimal
+ */
+export function groupDecimal(decimal) {
+    const [whole, fraction] = String(decimal ?? '0').split('.');
+    const sign = whole.startsWith('-') ? '-' : '';
+    const grouped = whole.replace('-', '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return `${sign}${grouped}${fraction !== undefined ? `.${fraction}` : ''}`;
+}
+
+/**
  * "1250.5", "SAR" → "1,250.50 SAR"
  * @param {string|number} amount decimal string or number
  * @param {string} currency ISO code

@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AcceptInvitationController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentPdfController;
 use App\Http\Controllers\DocumentShareController;
@@ -20,7 +21,6 @@ use App\Http\Controllers\Team\InvitationController;
 use App\Http\Controllers\Team\MemberController;
 use App\Http\Controllers\Team\TeamController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 | Login with a magic link (no passwords).
@@ -56,7 +56,7 @@ Route::get('branding/{company}/{kind}', [BrandingController::class, 'show'])->na
 | The team's workspace.
 */
 Route::middleware(['auth', 'member'])->group(function () {
-    Route::get('/', fn () => Inertia::render('Welcome'))->name('home');
+    Route::get('/', DashboardController::class)->name('home');
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 
     // Quotations and invoices: same controller, the "type" default tells them apart.

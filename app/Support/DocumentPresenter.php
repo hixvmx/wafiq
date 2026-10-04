@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Actions\SaveDocument;
+use App\Enums\DocumentStatus;
 use App\Models\Client;
 use App\Models\Company;
 use App\Models\Document;
@@ -83,7 +84,9 @@ final class DocumentPresenter
             'views_count' => $document->views_count,
             'created_by' => $document->creator?->name,
             // "Sent 3+ days ago and still not opened" (section 3: follow-up warning).
-            'not_viewed_warning' => $document->sent_at !== null && $document->first_viewed_at === null && $document->sent_at->lte(now()->subDays(3)),
+            // Only while still "Sent": once the client answered (or it expired) there's nothing to chase.
+            'not_viewed_warning' => $document->status === DocumentStatus::Sent
+                && $document->sent_at !== null && $document->first_viewed_at === null && $document->sent_at->lte(now()->subDays(3)),
         ];
     }
 

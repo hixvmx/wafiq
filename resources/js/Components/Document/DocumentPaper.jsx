@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { formatDate } from '@/lib/format';
+import { groupDecimal } from '@/lib/money';
 import { useT } from '@/lib/i18n';
 import { TotalsBox } from './TotalsBox';
 
@@ -32,7 +33,7 @@ export function DocumentPaper({ document }) {
                         {company.logo_url ? <img src={company.logo_url} alt={company.name} className="mb-2 h-14 w-auto max-w-48 object-contain" /> : null}
                         <p className="text-lg font-bold">{company.legal_name || company.name}</p>
                         {company.address && <p className="text-ink-muted text-sm whitespace-pre-line">{company.address}</p>}
-                        <p className="text-ink-muted space-x-3 text-xs rtl:space-x-reverse">
+                        <p className="text-ink-muted flex flex-wrap gap-x-3 text-xs">
                             {company.vat_number && <span>{t('documents.paper.vat', { number: company.vat_number })}</span>}
                             {company.cr_number && <span>{t('documents.paper.cr', { number: company.cr_number })}</span>}
                         </p>
@@ -62,7 +63,7 @@ export function DocumentPaper({ document }) {
                         <p className="mt-1 font-semibold">{client.name}</p>
                         {client.contact_name && <p className="text-ink-muted text-sm">{client.contact_name}</p>}
                         {client.address && <p className="text-ink-muted text-sm whitespace-pre-line">{client.address}</p>}
-                        <p className="text-ink-muted space-x-3 text-xs rtl:space-x-reverse">
+                        <p className="text-ink-muted flex flex-wrap gap-x-3 text-xs">
                             {client.vat_number && <span>{t('documents.paper.vat', { number: client.vat_number })}</span>}
                             {client.cr_number && <span>{t('documents.paper.cr', { number: client.cr_number })}</span>}
                         </p>
@@ -95,7 +96,7 @@ export function DocumentPaper({ document }) {
                                         <span dir="ltr">{line.qty}</span> {line.unit}
                                     </td>
                                     <td className="px-2 py-3 text-end" dir="ltr">
-                                        {line.unit_price}
+                                        {groupDecimal(line.unit_price)}
                                     </td>
                                     {hasLineDiscount && (
                                         <td className="px-2 py-3 text-end" dir="ltr">
@@ -108,7 +109,7 @@ export function DocumentPaper({ document }) {
                                         </td>
                                     )}
                                     <td className="py-3 ps-2 text-end font-medium" dir="ltr">
-                                        {line.net}
+                                        {groupDecimal(line.net)}
                                     </td>
                                 </tr>
                             ))}
@@ -125,12 +126,12 @@ export function DocumentPaper({ document }) {
                     <div className="order-1 sm:order-2">
                         <TotalsBox
                             currency={document.currency}
-                            subtotal={document.subtotal}
-                            discount={document.discount}
+                            subtotal={groupDecimal(document.subtotal)}
+                            discount={groupDecimal(document.discount)}
                             discountLabel={document.discount_label}
-                            taxable={document.taxable}
-                            taxes={document.tax_breakdown}
-                            total={document.total}
+                            taxable={groupDecimal(document.taxable)}
+                            taxes={document.tax_breakdown.map((tax) => ({ ...tax, amount: groupDecimal(tax.amount) }))}
+                            total={groupDecimal(document.total)}
                         />
                     </div>
                 </div>

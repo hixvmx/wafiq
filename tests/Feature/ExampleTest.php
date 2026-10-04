@@ -18,7 +18,7 @@ class ExampleTest extends TestCase
         $this->actingAs($user)->get('/')
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
-                ->component('Welcome')
+                ->component('Dashboard')
                 ->where('company.name', 'شركة الإتقان')
                 ->where('translations.nav.quotes', 'عروض الأسعار')
                 ->has('app.edition'));

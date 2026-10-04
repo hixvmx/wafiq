@@ -405,10 +405,10 @@ wafiq/
 - [x] In-app notifications (bell + page) for @mentions; queued emails run from the one cron entry (`queue:work --stop-when-empty` every minute) *(other notifications, per-member preferences, daily digest: hidden in the section 16 checklist)*
 
 ### Phase 9 — Dashboard & reports
-- [ ] **Pipeline** (Sent / Viewed / Approved / Rejected / Expired counts and values), approval rate, average time to approval, value waiting for an answer
-- [ ] Needs attention: not viewed, viewed but no answer, expiring soon, overdue invoices
-- [ ] Reports: by member, by client, by month; VAT summary; receivables aging; CSV / Excel export
-- [ ] Full backup export (owner)
+- [x] **Pipeline** (count and value per status, values per currency, never converted), approval rate (approved ÷ sent), average time from sending to approval, value waiting for an answer; quotes / invoices and period (30 / 90 / 365 days / all) filters; Sales see their own numbers
+- [x] Needs attention: sent and not opened for 3 days, opened with no answer for 2 days, expiring within 2 days *(overdue invoices: needs payments, hidden in the section 16 checklist)*
+- [ ] Reports: by member, by client, by month; VAT summary; receivables aging; CSV / Excel export *(hidden in the section 16 checklist)*
+- [ ] Full backup export (owner) *(hidden in the section 16 checklist)*
 
 ### Phase 10 — Buyer experience
 - [ ] **Web installer** (requirements → database → company → owner → mail test → done)

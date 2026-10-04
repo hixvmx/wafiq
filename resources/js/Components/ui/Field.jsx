@@ -3,10 +3,15 @@ import { useId } from 'react';
 import { cn } from '@/lib/format';
 
 const control =
-    'block w-full rounded-xl border bg-card px-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-brand-500 focus:outline-none focus:ring-3 focus:ring-brand-100 disabled:bg-surface';
+    'block rounded-xl border bg-card px-3.5 text-sm text-ink placeholder:text-ink-subtle transition-colors focus:border-brand-500 focus:outline-none focus:ring-3 focus:ring-brand-100 disabled:bg-surface';
 
+/**
+ * Full width unless the caller sets a width ("w-44", "sm:w-72"…). Both classes together
+ * would not work: which one wins depends on CSS order, not on the order written here.
+ */
 function controlClass(error, extra) {
-    return cn(control, error ? 'border-danger' : 'border-line-strong', extra);
+    const hasWidth = /(^|\s)([\w-]+:)?w-/.test(extra ?? '');
+    return cn(control, hasWidth ? null : 'w-full', error ? 'border-danger' : 'border-line-strong', extra);
 }
 
 /**

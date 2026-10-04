@@ -15,12 +15,33 @@ export function TotalsBox({ currency, subtotal, discount, discountLabel, taxable
             {children}
             {hasDiscount && (
                 <>
-                    <Row label={`${t('documents.totals.discount')}${discountLabel ? ` (${discountLabel})` : ''}`} value={`− ${discount}`} />
+                    <Row
+                        label={
+                            <>
+                                {t('documents.totals.discount')}
+                                {discountLabel && (
+                                    <>
+                                        {' ('}
+                                        <bdi dir="ltr">{discountLabel}</bdi>)
+                                    </>
+                                )}
+                            </>
+                        }
+                        value={`− ${discount}`}
+                    />
                     <Row label={t('documents.totals.taxable')} value={taxable} />
                 </>
             )}
             {taxes.map((tax) => (
-                <Row key={`${tax.name}-${tax.rate}`} label={`${tax.name ?? t('documents.totals.tax')} ${tax.rate}%`} value={tax.amount} />
+                <Row
+                    key={`${tax.name}-${tax.rate}`}
+                    label={
+                        <>
+                            {tax.name ?? t('documents.totals.tax')} <bdi dir="ltr">{tax.rate}%</bdi>
+                        </>
+                    }
+                    value={tax.amount}
+                />
             ))}
             <div className="border-line flex items-baseline justify-between border-t pt-3">
                 <dt className="text-ink text-base font-bold">{t('documents.totals.total')}</dt>
@@ -54,4 +75,5 @@ function Row({ label, value }) {
     );
 }
 
-Row.propTypes = { label: PropTypes.string.isRequired, value: PropTypes.string };
+// Labels can mix Arabic and a left-to-right rate: <bdi dir="ltr"> keeps "5%" from turning into "%5".
+Row.propTypes = { label: PropTypes.node.isRequired, value: PropTypes.string };
