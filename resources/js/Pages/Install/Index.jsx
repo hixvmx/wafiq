@@ -228,8 +228,17 @@ Company.propTypes = { currencies: PropTypes.array.isRequired };
 
 function Mail({ ownerEmail, defaults }) {
     const t = useT();
-    const form = useForm({ mailer: 'smtp', host: '', port: defaults.mail_port, username: '', password: '', from_address: ownerEmail ?? '' });
+    const form = useForm({
+        mailer: 'smtp',
+        host: '',
+        port: defaults.mail_port,
+        username: '',
+        password: '',
+        resend_key: '',
+        from_address: ownerEmail ?? '',
+    });
     const smtp = form.data.mailer === 'smtp';
+    const resend = form.data.mailer === 'resend';
 
     return (
         <form
@@ -248,7 +257,7 @@ function Mail({ ownerEmail, defaults }) {
             <Field label={t('install.mailer')}>
                 {(id) => (
                     <Select id={id} value={form.data.mailer} onChange={(e) => form.setData('mailer', e.target.value)}>
-                        {['smtp', 'sendmail'].map((key) => (
+                        {['smtp', 'resend', 'sendmail'].map((key) => (
                             <option key={key} value={key}>
                                 {t(`install.mailers.${key}`)}
                             </option>
@@ -268,7 +277,27 @@ function Mail({ ownerEmail, defaults }) {
                     </div>
                 </>
             )}
-            <Input form={form} name="from_address" type="email" label={t('install.from_address')} hint={t('install.from_address_hint')} required />
+            {resend && (
+                <Input
+                    form={form}
+                    name="resend_key"
+                    label={t('install.resend_key')}
+                    hint={t('install.resend_hint')}
+                    type="password"
+                    ltr
+                    autoComplete="off"
+                    placeholder="re_…"
+                    required
+                />
+            )}
+            <Input
+                form={form}
+                name="from_address"
+                type="email"
+                label={t('install.from_address')}
+                hint={resend ? t('install.resend_from_hint') : t('install.from_address_hint')}
+                required
+            />
             <div className="border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4">
                 <button
                     type="button"

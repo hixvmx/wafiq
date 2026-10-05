@@ -6,8 +6,10 @@ use App\Actions\CreateCompany;
 use App\Models\User;
 use App\Support\EnvFile;
 use App\Support\Installer;
+use App\Support\MailSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -164,44 +166,13 @@ class InstallController extends Controller
     {
         $this->requireStep($request, 'mail');
 
-        $smtp = $request->input('mailer') === 'smtp';
-        $data = $request->validate([
-            'mailer' => ['required', Rule::in(['smtp', 'sendmail'])],
-            'host' => [Rule::requiredIf($smtp), 'nullable', 'string', 'max:255'],
-            'port' => [Rule::requiredIf($smtp), 'nullable', 'integer', 'between:1,65535'],
-            'username' => ['nullable', 'string', 'max:255'],
-            'password' => ['nullable', 'string', 'max:255'],
-            'from_address' => ['required', 'email', 'max:255'],
-        ]);
+        $data = $request->validate(Arr::except(MailSettings::rules($request), 'from_name'));
+        $env = MailSettings::env($data);
+        MailSettings::apply($env);
 
-        $env = [
-            'MAIL_MAILER' => $data['mailer'],
-            'MAIL_FROM_ADDRESS' => $data['from_address'],
-            ...($smtp ? [
-                'MAIL_HOST' => $data['host'],
-                'MAIL_PORT' => $data['port'],
-                'MAIL_USERNAME' => $data['username'] ?? '',
-                'MAIL_PASSWORD' => $data['password'] ?? '',
-                // 465 = implicit TLS; other ports upgrade with STARTTLS automatically.
-                'MAIL_SCHEME' => (int) $data['port'] === 465 ? 'smtps' : 'smtp',
-            ] : []),
-        ];
-
-        config([
-            'mail.default' => $data['mailer'],
-            'mail.from.address' => $data['from_address'],
-            'mail.mailers.smtp.host' => $data['host'] ?? null,
-            'mail.mailers.smtp.port' => $data['port'] ?? null,
-            'mail.mailers.smtp.username' => $data['username'] ?? null,
-            'mail.mailers.smtp.password' => $data['password'] ?? null,
-            'mail.mailers.smtp.scheme' => $env['MAIL_SCHEME'] ?? null,
-        ]);
-        app('mail.manager')->purge($data['mailer']);
-
-        try {
-            Mail::raw(__('ui.install.test_mail_body'), fn ($message) => $message->to($request->session()->get('install.owner_email'))->subject(__('ui.install.test_mail_subject')));
-        } catch (Throwable $e) {
-            throw ValidationException::withMessages(['mailer' => __('ui.install.mail_failed', ['error' => Str::limit($e->getMessage(), 200)])]);
+        $error = MailSettings::sendTest($request->session()->get('install.owner_email'), __('ui.install.test_mail_subject'), __('ui.install.test_mail_body'));
+        if ($error !== null) {
+            throw ValidationException::withMessages(['mailer' => __('ui.install.mail_failed', ['error' => $error])]);
         }
 
         $request->session()->forget('install.mail_skipped');

@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Building2, FileText, Hash, MessageSquareText, Palette, Percent } from 'lucide-react';
+import { Building2, FileText, Hash, Mail, MessageSquareText, Palette, Percent } from 'lucide-react';
 import PropTypes from 'prop-types';
+import { useEffect, useRef } from 'react';
 import { Button } from '@/Components/ui/Button';
 import { cn } from '@/lib/format';
 import { useT } from '@/lib/i18n';
@@ -13,19 +14,28 @@ const SECTIONS = [
     { key: 'numbering', icon: Hash },
     { key: 'documents', icon: FileText },
     { key: 'messages', icon: MessageSquareText },
+    // In the SaaS the mail is ours, not the customer's.
+    { key: 'mail', icon: Mail, selfHostedOnly: true },
 ];
 
 /** Settings pages: section list beside the form (a scrollable tab bar on phones). */
 export default function SettingsLayout({ children }) {
     const t = useT();
     const { url } = usePage();
+    const { app } = usePage().props;
     const current = url.split('?')[0].split('/')[2];
+    const nav = useRef(null);
+
+    // On phones the sections are a scrolling tab bar: bring the open one into view.
+    useEffect(() => {
+        nav.current?.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest', inline: 'center' });
+    }, [current]);
 
     return (
         <AppLayout title={t('settings.title')}>
             <div className="mx-auto flex max-w-5xl flex-col gap-6 lg:flex-row">
-                <nav className="-mx-4 flex shrink-0 gap-1 overflow-x-auto px-4 lg:mx-0 lg:w-56 lg:flex-col lg:px-0">
-                    {SECTIONS.map(({ key, icon: Icon }) => (
+                <nav ref={nav} className="-mx-4 flex shrink-0 gap-1 overflow-x-auto px-4 lg:mx-0 lg:w-56 lg:flex-col lg:px-0">
+                    {SECTIONS.filter((section) => !section.selfHostedOnly || app.edition !== 'saas').map(({ key, icon: Icon }) => (
                         <Link
                             key={key}
                             href={`/settings/${key}`}

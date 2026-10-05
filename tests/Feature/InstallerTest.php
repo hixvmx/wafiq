@@ -140,6 +140,19 @@ class InstallerTest extends TestCase
         $this->get('/install')->assertInertia(fn (Assert $page) => $page->where('step', 'requirements'));
     }
 
+    public function test_mail_can_use_resend(): void
+    {
+        Mail::fake();
+
+        $this->withSession(['install.step' => 'mail', 'install.owner_email' => 'o@example.com'])
+            ->post('/install/mail', ['mailer' => 'resend', 'resend_key' => 're_live_123', 'from_address' => 'hello@alitqan.example'])
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/install');
+
+        $this->assertStringContainsString('MAIL_MAILER=resend', $this->env());
+        $this->assertStringContainsString('RESEND_API_KEY=re_live_123', $this->env());
+    }
+
     public function test_mail_can_be_skipped(): void
     {
         $this->withSession(['install.step' => 'mail', 'install.owner_email' => 'o@example.com'])

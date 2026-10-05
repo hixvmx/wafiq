@@ -16,6 +16,7 @@ use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CompanyProfileController;
 use App\Http\Controllers\Settings\DocumentDefaultsController;
+use App\Http\Controllers\Settings\MailController;
 use App\Http\Controllers\Settings\MessageTemplatesController;
 use App\Http\Controllers\Settings\NumberingController;
 use App\Http\Controllers\Settings\TaxController;
@@ -163,5 +164,9 @@ Route::middleware(['auth', 'member'])->group(function () {
 
         Route::get('messages', [MessageTemplatesController::class, 'edit'])->name('messages');
         Route::put('messages', [MessageTemplatesController::class, 'update']);
+
+        Route::get('mail', [MailController::class, 'edit'])->name('mail');
+        Route::put('mail', [MailController::class, 'update'])->middleware('throttle:10,1');
+        Route::post('mail/test', [MailController::class, 'test'])->middleware('throttle:10,1')->name('mail.test');
     });
 });

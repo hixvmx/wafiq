@@ -89,6 +89,11 @@ return [
         'logo' => 'الشعار',
         'job_title' => 'المسمى الوظيفي',
         'avatar' => 'الصورة الشخصية',
+        'resend_key' => 'مفتاح Resend',
+        'from_address' => 'عنوان المرسل',
+        'from_name' => 'اسم المرسل',
+        'host' => 'خادم SMTP',
+        'port' => 'المنفذ',
     ],
 
 ];
