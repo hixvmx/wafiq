@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- Picalica cover (1700×970). Render: chrome --headless=new --window-size=1700,970 --screenshot=cover.png cover.html -->
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: Plex; font-weight: 400; src: url(fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2); }
+  @font-face { font-family: Plex; font-weight: 600; src: url(fonts/ibm-plex-sans-arabic-arabic-600-normal.woff2); }
+  @font-face { font-family: Plex; font-weight: 700; src: url(fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2); }
+  @font-face { font-family: Plex; font-weight: 400; src: url(fonts/ibm-plex-sans-arabic-latin-400-normal.woff2); unicode-range: U+0000-00FF; }
+  @font-face { font-family: Plex; font-weight: 700; src: url(fonts/ibm-plex-sans-arabic-latin-700-normal.woff2); unicode-range: U+0000-00FF; }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1700px; height: 970px; overflow: hidden; font-family: Plex, sans-serif; color: #0f172a;
+         background: radial-gradient(circle at 85% 15%, #ccfbf1 0, transparent 45%), linear-gradient(160deg, #f0fdfa 0%, #ffffff 55%, #f8fafc 100%); position: relative; }
+  .copy { position: absolute; top: 120px; right: 110px; width: 640px; }
+  .logo { display: inline-flex; align-items: center; gap: 18px; }
+  .mark { width: 84px; height: 84px; border-radius: 22px; background: #0f766e; color: #fff; font-size: 56px; font-weight: 700; display: grid; place-items: center; box-shadow: 0 12px 30px rgb(15 118 110 / .35); }
+  .name { font-size: 92px; font-weight: 700; line-height: 1; }
+  h1 { margin-top: 44px; font-size: 50px; font-weight: 700; line-height: 1.35; }
+  h1 span { color: #0f766e; }
+  .lead { margin-top: 22px; font-size: 25px; color: #475569; line-height: 1.7; }
+  .chips { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .chip { padding: 12px 22px; border-radius: 999px; background: #fff; border: 1px solid #ccfbf1; font-size: 21px; font-weight: 600; color: #134e4a; box-shadow: 0 2px 8px rgb(15 23 42 / .06); }
+  .price { margin-top: 44px; font-size: 22px; color: #475569; }
+  .price b { color: #0f766e; font-size: 26px; }
+  .desk { position: absolute; left: 70px; top: 120px; width: 880px; border-radius: 18px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 30px 70px rgb(15 23 42 / .18); background: #fff; }
+  .desk img { display: block; width: 100%; }
+  .phone { position: absolute; left: 640px; top: 330px; width: 300px; height: 610px; border-radius: 42px; padding: 12px; background: #0f172a; box-shadow: 0 30px 60px rgb(15 23 42 / .35); }
+  .phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 32px; display: block; }
+  .badge { position: absolute; left: 520px; top: 270px; background: #fff; border-radius: 18px; padding: 16px 22px; box-shadow: 0 16px 40px rgb(15 23 42 / .18); font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; background: #16a34a; }
+</style>
+</head>
+<body>
+  <div class="desk"><img src="screenshots/01-dashboard.png" alt=""></div>
+  <div class="phone"><img src="screenshots/07-client-phone.png" alt=""></div>
+  <div class="badge"><span class="dot"></span>وافق العميل على العرض</div>
+
+  <div class="copy">
+    <div class="logo"><div class="mark">و</div><div class="name">وافِق</div></div>
+    <h1>أرسل عرض السعر عبر <span>واتساب</span>،<br>واعرف متى فُتح، واحصل على <span>الموافقة</span>.</h1>
+    <p class="lead">نظام عربي لإرسال عروض الأسعار والفواتير وتتبعها والموافقة عليها أونلاين — لفرق المبيعات.</p>
+    <div class="chips">
+      <span class="chip">رابط متتبَّع لكل إرسال</span>
+      <span class="chip">موافقة العميل بضغطة</span>
+      <span class="chip">PDF عربي احترافي</span>
+      <span class="chip">فريق وأدوار وتعليقات</span>
+    </div>
+    <p class="price">دفعة واحدة · مستخدمون ومستندات <b>بلا حدود</b> · على استضافتك</p>
+  </div>
+</body>
+</html>

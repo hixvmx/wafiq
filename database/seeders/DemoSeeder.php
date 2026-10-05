@@ -40,11 +40,13 @@ class DemoSeeder extends Seeder
 
     private TaxRate $vat;
 
+    private Carbon $now;
+
     public function run(): void
     {
         // Nothing leaves the machine while seeding.
         config(['mail.default' => 'array', 'queue.default' => 'sync']);
-        $now = Carbon::now();
+        $now = $this->now = Carbon::now();
 
         $company = $this->company();
         $clients = $this->clients();
@@ -190,7 +192,7 @@ class DemoSeeder extends Seeder
     {
         $workflow = app(DocumentWorkflow::class);
         $at = $now->copy()->subDays($daysAgo)->setTime(9 + $i % 7, ($i * 13) % 60);
-        Carbon::setTestNow($at);
+        $this->clock($at);
 
         $quote = app(SaveDocument::class)->handle(null, 'quote', [
             'client_id' => $client->id,
@@ -226,23 +228,23 @@ class DemoSeeder extends Seeder
         $this->view($send, $at->copy()->addHours(2 + $i % 9), $i);
 
         if (str_starts_with($outcome, 'rejected:')) {
-            Carbon::setTestNow($at->copy()->addDays(2));
+            $this->clock($at->copy()->addDays(2));
             $workflow->reject($quote->fresh(), substr($outcome, strlen('rejected:')));
         } elseif ($outcome === 'approved') {
-            Carbon::setTestNow($at->copy()->addHours(20 + ($i * 7) % 60));
+            $this->clock($at->copy()->addHours(20 + ($i * 7) % 60));
             $workflow->approve($quote->fresh(), $client->contact_name ?? $client->name, '188.48.'.($i * 7 % 255).'.'.($i * 13 % 255), self::PHONE_BROWSER);
         } elseif ($outcome === 'expired') {
-            Carbon::setTestNow($quote->valid_until->copy()->addDay());
+            $this->clock($quote->valid_until->copy()->addDay());
             $workflow->expireIfDue($quote->fresh());
         } elseif ($outcome === 'revised') {
             // The client asked for changes: v2 with an extra line, sent, then approved.
-            Carbon::setTestNow($at->copy()->addDays(3));
+            $this->clock($at->copy()->addDays(3));
             $v2 = app(CopyDocument::class)->revise($quote->fresh(), $seller);
-            Carbon::setTestNow($at->copy()->addDays(3)->addHour());
+            $this->clock($at->copy()->addDays(3)->addHour());
             $this->send($v2, $seller, $client, $i);
-            Carbon::setTestNow($at->copy()->addDays(4));
+            $this->clock($at->copy()->addDays(4));
             $this->view($v2->sends()->first(), now(), $i);
-            Carbon::setTestNow($at->copy()->addDays(5));
+            $this->clock($at->copy()->addDays(5));
             $workflow->approve($v2->fresh(), $client->contact_name ?? $client->name, '188.48.10.20', self::DESKTOP_BROWSER);
         }
     }
@@ -262,13 +264,19 @@ class DemoSeeder extends Seeder
         return $result['send'];
     }
 
+    /** Moves the clock to $at, but never past the real "now": the demo must not contain the future. */
+    private function clock(Carbon $at): void
+    {
+        Carbon::setTestNow($at->lt($this->now) ? $at : $this->now);
+    }
+
     private function view(DocumentSend $send, Carbon $at, int $i): void
     {
-        Carbon::setTestNow($at);
+        $this->clock($at);
         app(RecordView::class)->handle($send->fresh(), null, '188.48.1.'.(10 + $i), $i % 3 ? self::PHONE_BROWSER : self::DESKTOP_BROWSER);
 
         if ($i % 3 === 0) { // some clients open it again the next day
-            Carbon::setTestNow($at->copy()->addDay());
+            $this->clock($at->copy()->addDay());
             app(RecordView::class)->handle($send->fresh(), null, '188.48.1.'.(10 + $i), self::PHONE_BROWSER);
         }
     }
@@ -278,11 +286,11 @@ class DemoSeeder extends Seeder
         $approved = Document::where('type', 'quote')->where('status', 'approved')->where('is_latest', true)->orderBy('id')->take(2)->get();
 
         foreach ($approved as $n => $quote) {
-            Carbon::setTestNow($quote->approved_at->copy()->addDay());
+            $this->clock($quote->approved_at->copy()->addDay());
             $invoice = app(CopyDocument::class)->convertToInvoice($quote, $this->team['fahad']);
 
             if ($n === 0) {
-                Carbon::setTestNow($quote->approved_at->copy()->addDays(1)->addHour());
+                $this->clock($quote->approved_at->copy()->addDays(1)->addHour());
                 $send = $this->send($invoice, $this->team['fahad'], $quote->client, 1);
                 $this->view($send, $quote->approved_at->copy()->addDays(2), 1);
             }

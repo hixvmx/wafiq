@@ -33,7 +33,11 @@ class SeederTest extends TestCase
         $this->assertGreaterThan(50, Activity::count());
         $this->assertGreaterThan(10, DocumentView::count());
         $this->assertSame(5, $company->users()->count());
-        $this->assertTrue(Document::all()->every(fn ($document) => $document->created_at->lte(now())));
+        // Whatever the time of day the seeder runs, nothing is dated in the future.
+        $this->assertTrue(Document::all()->every(fn ($document) => $document->created_at->lte(now())
+            && ($document->approved_at === null || $document->approved_at->lte(now()))));
+        $this->assertSame(0, Activity::where('created_at', '>', now())->count());
+        $this->assertSame(0, DocumentView::where('viewed_at', '>', now())->count());
     }
 
     public function test_the_development_seeder_runs_and_fills_company_id(): void

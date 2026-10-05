@@ -113,7 +113,8 @@ class ShareDocument
         return [
             'client_name' => $client?->contact_name ?: ($client?->name ?? ''),
             'number' => $document->displayNumber(),
-            'amount' => Money::format($document->total_minor, $document->currency),
+            // Arabic currency name: "12,500.00 ريال سعودي" reads naturally in an Arabic sentence ("SAR" gets reordered).
+            'amount' => Money::group(Money::fromMinor($document->total_minor, $document->currency)).' '.__("currencies.{$document->currency}"),
             'link' => $link,
             'valid_until' => $date($document->valid_until),
             'due_date' => $date($document->due_date),

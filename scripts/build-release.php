@@ -32,6 +32,8 @@ $exclude = [
     '.env', '.env.example', '.env.testing', '.phpunit.result.cache', 'phpunit.xml', '.editorconfig',
     'eslint.config.js', '.prettierrc', 'jsconfig.json', 'idea-wafiq.md', 'public/hot', 'public/storage',
     '.claude/', '.vscode/', '.idea/',
+    // Our sales material, not part of the product
+    'marketing/', 'website/',
 ];
 
 /** Folders copied empty (only their .gitignore): runtime data never ships. */
@@ -116,12 +118,12 @@ foreach (glob("{$target}/bootstrap/cache/*.php") as $cached) {
 
 step('Checking the package');
 $problems = [];
-foreach (['app/Saas', 'routes/saas.php', 'resources/js/Pages/Saas', '.env', 'tests', 'node_modules'] as $mustNotExist) {
+foreach (['app/Saas', 'routes/saas.php', 'resources/js/Pages/Saas', '.env', 'tests', 'node_modules', 'marketing', 'website'] as $mustNotExist) {
     if (file_exists("{$target}/{$mustNotExist}")) {
         $problems[] = "{$mustNotExist} is in the package";
     }
 }
-foreach (['public/build/manifest.json', 'vendor/autoload.php', '.env.example', 'resources/fonts/pdf/ibmplexsansarabic.php', 'resources/fonts/pdf/OFL.txt'] as $mustExist) {
+foreach (['public/build/manifest.json', 'vendor/autoload.php', '.env.example', 'resources/fonts/pdf/ibmplexsansarabic.php', 'resources/fonts/pdf/OFL.txt', 'docs/README.md', 'LICENSE.txt', 'CREDITS.md', 'CHANGELOG.md'] as $mustExist) {
     if (! file_exists("{$target}/{$mustExist}")) {
         $problems[] = "{$mustExist} is missing";
     }

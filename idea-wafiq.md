@@ -426,11 +426,12 @@ wafiq/
 - [ ] Manual test on cPanel shared hosting + a real SMTP provider *(needs you: real hosting)*
 
 ### Phase 12 — Website, docs & Picalica listing
-- [ ] **{domain}** landing page (Arabic), `/docs`, `support@{domain}`
-- [ ] Arabic docs (install cPanel / VPS, cron & mail, first steps, sharing & tracking, roles, templates, FAQ)
-- [ ] 3 short Arabic videos: install · create & send by WhatsApp · track and get approval
-- [ ] Cover 1700×970, 8–12 screenshots (pipeline, send dialog, client page on phone, tracking timeline, PDF)
-- [ ] Listing text with the **legal note** (not ZATCA Phase 2, approval ≠ certified e-signature), licence text **forbidding public SaaS / multi-company resale** (see section 6), third-party credits (TCPDF LGPL, fonts OFL, icons ISC)
+- [x] Landing page (Arabic, RTL, works on phones): `website/index.html` + `website/img/`. Hero, 3 steps, honest tracking, client approval on the phone, features, both prices, legal note, FAQ. *Still to fill in: `{domain}`, `{picalica-url}`, `support@{domain}`, then host it with `/docs` (needs you)*
+- [x] Arabic docs in `docs/` (shipped inside the zip): install on cPanel / VPS, cron & mail, first steps, sending & tracking, roles, FAQ (message templates are covered in "first steps")
+- [ ] 3 short Arabic videos: install · create & send by WhatsApp · track and get approval *(scene-by-scene scripts are ready in `marketing/video-scripts.md`; recording needs you)*
+- [x] Cover `marketing/cover.png` (1700×970) + 11 screenshots from the demo company in `marketing/screenshots/` (dashboard, quotes list, editor, send dialog, tracking, client page desktop + phone, approve on phone, WhatsApp template, PDF, team)
+- [x] Listing text `marketing/picalica-listing.md` with the **legal note** (not ZATCA Phase 2 / ETA, approval ≠ certified e-signature), prices $39 / $99, requirements, screenshot order. `LICENSE.txt` (forbids public SaaS / multi-company resale / redistribution), `CREDITS.md` (TCPDF LGPL, IBM Plex OFL, Lucide ISC, MIT packages), `CHANGELOG.md` 1.0.0; `composer.json` licence set to proprietary
+- [x] Release script: `marketing/` and `website/` stay out of the zip; it checks that `docs/`, `LICENSE.txt`, `CREDITS.md` and `CHANGELOG.md` are in
 
 ### Phase 13 — Launch & after
 - [ ] Submit to Picalica; fix review feedback

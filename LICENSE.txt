@@ -1,0 +1,35 @@
+رخصة استخدام وافِق (Wafiq)
+========================
+
+حقوق النشر © 2026 مطوّر وافِق. جميع الحقوق محفوظة.
+
+تحصل بشرائك وافِق من Picalica على رخصة استخدام غير حصرية وغير قابلة للتحويل، وفق نوع الرخصة التي اشتريتها:
+
+1. الرخصة الشخصية
+   - تثبيت واحد لشركة واحدة تملكها أو تعمل بها.
+   - مستخدمون وعملاء ومستندات بلا حدود داخل هذا التثبيت.
+   - يجوز لك تعديل الكود لاحتياجات شركتك.
+
+2. الرخصة التجارية
+   - كل ما في الرخصة الشخصية.
+   - تثبيت وافِق لعملائك كخدمة مدفوعة (تثبيت واحد مستقل لكل عميل، لشركة واحدة).
+
+غير مسموح في أي من الرخصتين:
+   - تقديم وافِق كخدمة عامة متعددة الشركات أو باشتراكات (SaaS) يسجّل فيها أي شخص.
+   - إعادة بيع الكود المصدري أو توزيعه أو نشره، كاملاً أو جزءاً، مجاناً أو بمقابل.
+   - إزالة هذه الرخصة أو إشعارات حقوق الطرف الثالث (CREDITS.md).
+
+يُقدَّم البرنامج «كما هو» دون أي ضمان. وافِق أداة لعروض الأسعار والفواتير التجارية مع الموافقة أونلاين،
+وليس حلاً معتمداً للفوترة الإلكترونية (مثل المرحلة الثانية من ZATCA في السعودية أو منظومة ETA في مصر)،
+وموافقة العميل فيه سجلّ للقبول وليست توقيعاً إلكترونياً معتمداً. المستخدم مسؤول عن التزامه بالأنظمة الضريبية في بلده.
+
+------------------------------------------------------------
+
+Wafiq licence (English summary)
+
+Personal licence: one installation for one company. Commercial licence: also installing it, as a paid
+service, for your own clients (one separate installation per client company). Not allowed: offering Wafiq
+as a public multi-company / subscription (SaaS) service, or reselling or redistributing the source code.
+Provided "as is", without warranty. Wafiq is not a certified e-invoicing solution (e.g. ZATCA Phase 2,
+Egypt ETA), and the client's online approval is a record of acceptance, not a certified e-signature.
+Third-party components keep their own licences, listed in CREDITS.md.

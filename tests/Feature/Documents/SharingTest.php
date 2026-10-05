@@ -60,7 +60,7 @@ class SharingTest extends TestCase
             ->where('sendDefaults.whatsapp.phone', '+966501234567')
             ->where('sendDefaults.whatsapp.message', fn ($message) => str_contains($message, 'مرحباً خالد')
                 && str_contains($message, 'QT-2026-0001')
-                && str_contains($message, '12,500.00 SAR')
+                && str_contains($message, '12,500.00 ريال سعودي')
                 && str_contains($message, '{link}')
                 && str_contains($message, '19 أكتوبر 2026'))
             ->where('sendDefaults.email.to', 'khalid@example.com'));
