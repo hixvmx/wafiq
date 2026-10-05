@@ -79,12 +79,13 @@ export default function DocumentsIndex({ type, documents, filters, counts, canCr
                             {documents.data.map((document) => (
                                 <li key={document.id}>
                                     <Link href={`${url}/${document.id}`} className="hover:bg-surface flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-4">
-                                        <div className="min-w-0 flex-1">
-                                            <p className="text-ink flex items-center gap-2 text-sm font-semibold">
-                                                <span className="font-mono" dir="ltr">
+                                        {/* On phones the details take the first line, amount and status the second. */}
+                                        <div className="w-full min-w-0 sm:w-auto sm:flex-1">
+                                            <p className="text-ink flex min-w-0 items-center gap-2 text-sm font-semibold">
+                                                <span className="shrink-0 font-mono whitespace-nowrap" dir="ltr">
                                                     {document.number}
                                                 </span>
-                                                <span className="text-ink-muted truncate font-normal">· {document.client_name}</span>
+                                                <span className="text-ink-muted min-w-0 truncate font-normal">· {document.client_name}</span>
                                             </p>
                                             <p className="text-ink-subtle mt-1 flex flex-wrap gap-x-3 text-xs">
                                                 <span>{formatDate(document.issue_date)}</span>

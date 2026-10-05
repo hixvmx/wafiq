@@ -42,7 +42,7 @@ export default function Dashboard({ type, period, currency, pipeline, kpis, atte
             title={t('nav.dashboard')}
             actions={
                 canCreate && (
-                    <ButtonLink href={`${prefix}/create`} icon={<Plus className="size-4" />} className="hidden sm:inline-flex">
+                    <ButtonLink href={`${prefix}/create`} icon={<Plus className="size-4" />}>
                         {t(`documents.types.${type}.new`)}
                     </ButtonLink>
                 )

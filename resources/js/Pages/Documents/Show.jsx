@@ -28,7 +28,8 @@ export default function DocumentShow({ document, revisions, quote, invoice, can,
     return (
         <AppLayout
             title={`${t(`documents.types.${document.type}.one`)} ${document.number}`}
-            actions={<StatusBadge status={document.status} className="hidden sm:inline-flex" />}
+            back={`/${prefix(document.type)}`}
+            actions={<StatusBadge status={document.status} />}
         >
             <div className="mx-auto max-w-4xl space-y-5">
                 {/* Actions */}

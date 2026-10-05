@@ -1,5 +1,5 @@
-import { Link, useForm } from '@inertiajs/react';
-import { ArrowRight, Save } from 'lucide-react';
+import { useForm } from '@inertiajs/react';
+import { Save } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import { ClientDialog } from '@/Components/Clients/ClientDialog';
@@ -74,18 +74,7 @@ export default function DocumentForm({ type, document, values, taxRates, currenc
     const linesHaveErrors = Object.keys(errors).some((key) => key === 'lines' || key.startsWith('lines.'));
 
     return (
-        <AppLayout
-            title={title}
-            actions={
-                <Link
-                    href={document ? `/${prefix(type)}/${document.id}` : `/${prefix(type)}`}
-                    className="text-ink-muted hover:text-ink hidden text-sm sm:inline-flex sm:items-center sm:gap-1"
-                >
-                    <ArrowRight className="size-4" />
-                    {t('documents.actions.back')}
-                </Link>
-            }
-        >
+        <AppLayout title={title} back={document ? `/${prefix(type)}/${document.id}` : `/${prefix(type)}`}>
             <form onSubmit={submit} className="mx-auto max-w-6xl space-y-5 pb-24">
                 <Card className="grid gap-5 p-5 md:grid-cols-[minmax(0,1fr)_auto]">
                     <Field label={t('documents.client')} error={undefined}>
