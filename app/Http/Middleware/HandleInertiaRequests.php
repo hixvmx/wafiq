@@ -42,7 +42,7 @@ class HandleInertiaRequests extends Middleware
                 return $company ? [...$company->only('id', 'name', 'currency'), 'logo_url' => $company->imageUrl('logo')] : null;
             },
             'auth' => [
-                'user' => $user?->only('id', 'name', 'email', 'avatar'),
+                'user' => $user ? [...$user->only('id', 'name', 'email', 'job_title'), 'avatar' => $user->avatarUrl()] : null,
                 'role' => fn () => $user?->currentRole()?->value,
                 'unread_notifications' => fn () => $user && app(CurrentCompany::class)->id()
                     ? NotificationController::query($request)->whereNull('read_at')->count()

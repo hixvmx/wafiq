@@ -26,6 +26,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'job_title',
+        'phone',
         'email',
         'password',
         'avatar',
@@ -66,6 +68,12 @@ class User extends Authenticatable
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class)->withPivot('role')->withTimestamps();
+    }
+
+    /** Profile picture URL (the file name changes on every upload, so it can be cached forever). */
+    public function avatarUrl(): ?string
+    {
+        return $this->avatar ? route('avatars.show', ['user' => $this->id, 'v' => pathinfo($this->avatar, PATHINFO_FILENAME)]) : null;
     }
 
     /** @return HasMany<LoginToken, $this> */

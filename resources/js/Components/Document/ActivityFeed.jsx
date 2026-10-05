@@ -111,7 +111,7 @@ function CommentItem({ comment, members }) {
 
     return (
         <li id={`comment-${comment.id}`} className="bg-surface target:ring-brand-300 flex scroll-mt-24 gap-3 rounded-xl p-3 target:ring-2">
-            <Avatar src={null} name={comment.user ?? '?'} size={30} />
+            <Avatar src={comment.avatar} name={comment.user ?? '?'} size={30} />
             <div className="min-w-0 flex-1">
                 <p className="text-xs">
                     <span className="text-ink font-semibold">{comment.user}</span>
@@ -258,7 +258,7 @@ function CommentBox({ url, members }) {
                                         i === active ? 'bg-brand-50' : 'hover:bg-surface',
                                     )}
                                 >
-                                    <Avatar src={null} name={member.name} size={24} />
+                                    <Avatar src={member.avatar} name={member.name} size={24} />
                                     {member.name}
                                 </li>
                             ))

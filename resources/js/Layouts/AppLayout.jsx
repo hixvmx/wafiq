@@ -132,14 +132,14 @@ function UserBox({ user }) {
     const t = useT();
 
     return (
-        <div className="border-line flex items-center gap-3 border-t p-4">
-            <Avatar src={user.avatar} name={user.name} size={36} />
-            <div className="min-w-0 flex-1">
-                <p className="text-ink truncate text-sm font-semibold">{user.name}</p>
-                <p className="text-ink-subtle truncate text-xs" dir="ltr">
-                    {user.email}
-                </p>
-            </div>
+        <div className="border-line flex items-center gap-1 border-t p-3">
+            <Link href="/profile" className="hover:bg-surface flex min-w-0 flex-1 items-center gap-3 rounded-xl p-1.5" title={t('nav.profile')}>
+                <Avatar src={user.avatar} name={user.name} size={36} />
+                <div className="min-w-0 flex-1">
+                    <p className="text-ink truncate text-sm font-semibold">{user.name}</p>
+                    <p className="text-ink-subtle truncate text-xs">{user.job_title || <span dir="ltr">{user.email}</span>}</p>
+                </div>
+            </Link>
             <Link
                 href="/logout"
                 method="post"
@@ -154,7 +154,9 @@ function UserBox({ user }) {
     );
 }
 
-UserBox.propTypes = { user: PropTypes.shape({ name: PropTypes.string, email: PropTypes.string, avatar: PropTypes.string }).isRequired };
+UserBox.propTypes = {
+    user: PropTypes.shape({ name: PropTypes.string, email: PropTypes.string, job_title: PropTypes.string, avatar: PropTypes.string }).isRequired,
+};
 
 /** Unread in-app notifications (for now: @mentions in comments). */
 function NotificationBell({ count }) {

@@ -135,7 +135,7 @@ class DocumentController extends Controller
             // For @mentions: teammates who can open this document.
             'members' => app(CurrentCompany::class)->get()->users()->whereKeyNot($user->id)->orderBy('name')->get()
                 ->filter(fn (User $member) => $member->can('view', $document))
-                ->map(fn (User $member) => ['id' => $member->id, 'name' => $member->name])
+                ->map(fn (User $member) => ['id' => $member->id, 'name' => $member->name, 'avatar' => $member->avatarUrl()])
                 ->values(),
             'revisions' => $document->revisions()->get()->map(fn (Document $revision) => [
                 'id' => $revision->id,
@@ -256,6 +256,7 @@ class DocumentController extends Controller
             'kind' => 'comment',
             'id' => $comment->id,
             'user' => $comment->user?->name,
+            'avatar' => $comment->user?->avatarUrl(),
             'body' => $comment->body,
             'at' => $comment->created_at->toIso8601String(),
             'can_delete' => $comment->user_id === $user->id || $canModerate,

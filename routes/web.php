@@ -11,6 +11,7 @@ use App\Http\Controllers\DocumentShareController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\Settings\BrandingController;
 use App\Http\Controllers\Settings\CompanyProfileController;
@@ -101,6 +102,15 @@ Route::middleware(['auth', 'member'])->group(function () {
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('notifications/{id}', [NotificationController::class, 'open'])->name('notifications.open');
     Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+
+    // Everyone edits their own profile (not the email: it is the login).
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('profile', 'edit')->name('profile.edit');
+        Route::put('profile', 'update')->name('profile.update');
+        Route::post('profile/avatar', 'uploadAvatar')->name('profile.avatar.store');
+        Route::delete('profile/avatar', 'destroyAvatar')->name('profile.avatar.destroy');
+        Route::get('users/{user}/avatar', 'avatar')->name('avatars.show');
+    });
 
     // Every member can browse clients and the catalog; editing needs the matching permission.
     Route::get('clients', [ClientController::class, 'index'])->name('clients.index');
